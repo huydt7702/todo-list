@@ -32,7 +32,7 @@ function MyDay() {
                     </h2>
                     <p className="text-[#605e5c] text-[12px] mt-[4px]">{getCurrentDate()}</p>
                 </div>
-                <div className="w-3/4 max-sm:hidden">
+                <div className="w-3/4 max-lg:hidden">
                     <Search />
                 </div>
             </div>

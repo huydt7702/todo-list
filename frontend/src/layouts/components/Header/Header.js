@@ -79,7 +79,7 @@ function Header({ currentUser }) {
             <Link to={config.routes.home} className="font-semibold text-white hover:underline">
                 To Do
             </Link>
-            <div className=" hidden max-sm:block ">
+            <div className=" hidden max-lg:block ">
                 <Search />
             </div>
 

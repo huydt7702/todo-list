@@ -73,7 +73,7 @@ function Search({ id }) {
             render={renderResult}
             onClickOutside={handleHideResult}
         >
-            <div className="relative flex items-center  w-[800px]  rounded-lg max-sm:w-[300px]">
+            <div className="relative flex items-center  w-[800px]  rounded-lg max-sm:w-[300px] max-2xl:w-[700px]  max-[1380px]:w-[600px] max-[1230px]:w-[500px] max-[1120px]:w-[400px]  border-2 border-indigo-300">
                 <span className="absolute top-0 lef-0 bottom-0 flex items-center justify-center px-[8px] cursor-pointer text-[#2564cf] hover:bg-[rgba(0,0,0,0.05)] transition-colors">
                     <SearchIcon />
                 </span>
@@ -83,13 +83,13 @@ function Search({ id }) {
                     ref={inputRef}
                     spellCheck={false}
                     placeholder="Search Task..."
-                    className="flex-1 py-[8px] px-[60px] h-[50px] rounded-lg text-2xl max-sm:h-[30px] max-sm:text-xl"
+                    className="flex-1 py-[8px] px-[60px] h-[50px] rounded-lg text-2xl max-lg:h-[30px] max-lg:text-xl border-cyan-400"
                     onChange={handleChange}
                     onFocus={() => setShowResult(true)}
                 />
                 {searchValue && (
                     <span
-                        className="absolute top-0 bottom-0 right-0 flex items-center justify-center px-[8px] cursor-pointer text-[#2564cf] hover:bg-[rgba(0,0,0,0.05)] transition-colors"
+                        className="absolute  top-0 bottom-0 right-0 flex items-center justify-center px-[8px] cursor-pointer text-[#2564cf] hover:bg-[rgba(0,0,0,0.05)] transition-colors"
                         onClick={handleClear}
                     >
                         <ClearIcon />
