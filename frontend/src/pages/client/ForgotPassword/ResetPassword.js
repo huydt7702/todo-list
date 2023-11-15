@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
+import './style.css'
 const ResetPassword = () => {
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
@@ -29,36 +30,36 @@ const ResetPassword = () => {
         }
     };
     return (
-        <div>
-            {/* Form reset password */}
-            <div className="flex flex-col items-center justify-center p-12 max-sm:w-full">
-                <h1 className="mt-6 mb-2 text-3xl font-semibold">Reset Password</h1>
-                <p className="text-[#555] text-2xl">Please enter your new password.</p>
-
-                <div className="flex flex-col items-center w-full gap-4 mt-10">
-                    <input
-                        onChange={(e) => setPassword(e.target.value)}
-                        className="w-full text-2xl p-4 border-[1px] border-solid border-[#999] rounded-md"
-                        type="password"
-                        name="password"
-                        placeholder="Enter your password"
-                    />
-                    <input
-                        onChange={(e) => setConfirmPassword(e.target.value)}
-                        className="w-full text-2xl p-4 border-[1px] border-solid border-[#999] rounded-md"
-                        type="password"
-                        name="confirmPassword"
-                        placeholder="Enter your confirm password"
-                    />
-                    <button
-                        onClick={handleSubmit}
-                        className="w-full text-2xl p-4 border-[1px] border-solid border-[#999] rounded-md"
-                    >
-                        Submit
-                    </button>
-                </div>
+        <div className="flex flex-col items-center justify-center p-8 max-w-4xl mt-40 rounded-xl lg:shadow-lg mx-auto  bg-white">
+        <h1 className="mt-6 mb-4 text-4xl font-semibold">Reset your password</h1>
+        <p className="text-gray-600 text-lg mb-6">Please enter your new password.</p>
+    
+        <form className="w-full mt-4 p-10">
+            <div className="flex flex-col w-full gap-4">
+                <input
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="w-full px-4 py-3 mb-2 br text-xl rounded-md"
+                    type="password"
+                    name="password"
+                    placeholder="Enter your password"
+                />
+                <input
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    className="w-full px-4 py-3 br text-xl rounded-md"
+                    type="password"
+                    name="confirmPassword"
+                    placeholder="Confirm your password"
+                />
+                <button
+                    onClick={handleSubmit}
+                    className="w-full mt-6 px-4 py-3 bg-custom-pink text-white rounded-md transition duration-300 font-semibold"
+                >
+                    Reset
+                </button>
             </div>
-        </div>
+        </form>
+    </div>
+    
     );
 };
 
