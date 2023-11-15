@@ -22,8 +22,8 @@ function MyDay() {
 
     return (
         <div>
-            <div className="flex flex-grow">
-                <div className="w-1/4">
+            <div className="flex flex-grow ">
+                <div className=" w-1/4">
                     <h2 className="flex items-center gap-[8px] font-medium text-[18px]">
                         <span>
                             <TheSunIcon width="2.4rem" height="2.4rem" />
@@ -32,7 +32,7 @@ function MyDay() {
                     </h2>
                     <p className="text-[#605e5c] text-[12px] mt-[4px]">{getCurrentDate()}</p>
                 </div>
-                <div className="w-3/4">
+                <div className="w-3/4 max-sm:hidden">
                     <Search />
                 </div>
             </div>

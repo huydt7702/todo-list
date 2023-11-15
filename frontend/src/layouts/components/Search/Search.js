@@ -73,7 +73,7 @@ function Search({ id }) {
             render={renderResult}
             onClickOutside={handleHideResult}
         >
-            <div className="relative flex items-center  w-[800px] max-sm:hidden rounded-lg">
+            <div className="relative flex items-center  w-[800px]  rounded-lg max-sm:w-[300px]">
                 <span className="absolute top-0 lef-0 bottom-0 flex items-center justify-center px-[8px] cursor-pointer text-[#2564cf] hover:bg-[rgba(0,0,0,0.05)] transition-colors">
                     <SearchIcon />
                 </span>
@@ -83,7 +83,7 @@ function Search({ id }) {
                     ref={inputRef}
                     spellCheck={false}
                     placeholder="Search Task..."
-                    className="flex-1 py-[8px] px-[60px] h-[50px] rounded-lg text-2xl"
+                    className="flex-1 py-[8px] px-[60px] h-[50px] rounded-lg text-2xl max-sm:h-[30px] max-sm:text-xl"
                     onChange={handleChange}
                     onFocus={() => setShowResult(true)}
                 />
