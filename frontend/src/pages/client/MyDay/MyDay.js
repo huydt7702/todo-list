@@ -1,5 +1,6 @@
 import CreateTask from '~/components/CreateTask';
 import { TheSunIcon } from '~/components/Icons';
+import Search from '~/layouts/components/Search';
 
 function MyDay() {
     const getCurrentDate = () => {
@@ -21,13 +22,20 @@ function MyDay() {
 
     return (
         <div>
-            <h2 className="flex items-center gap-[8px] font-medium text-[18px]">
-                <span>
-                    <TheSunIcon width="2.4rem" height="2.4rem" />
-                </span>
-                Ngày của Tôi
-            </h2>
-            <p className="text-[#605e5c] text-[12px] mt-[4px]">{getCurrentDate()}</p>
+            <div className="flex flex-grow">
+                <div className="w-1/4">
+                    <h2 className="flex items-center gap-[8px] font-medium text-[18px]">
+                        <span>
+                            <TheSunIcon width="2.4rem" height="2.4rem" />
+                        </span>
+                        Ngày của Tôi
+                    </h2>
+                    <p className="text-[#605e5c] text-[12px] mt-[4px]">{getCurrentDate()}</p>
+                </div>
+                <div className="w-3/4">
+                    <Search />
+                </div>
+            </div>
 
             <CreateTask />
         </div>

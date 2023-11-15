@@ -80,8 +80,6 @@ function Header({ currentUser }) {
                 To Do
             </Link>
 
-            <Search />
-
             <div className="flex items-center gap-[10px] h-full">
                 <HeadlessTippy
                     trigger="click"
