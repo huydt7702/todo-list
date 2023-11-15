@@ -1,20 +1,35 @@
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import ContentEditable from 'react-contenteditable';
 import { ContextMenu, ContextMenuTrigger } from 'react-contextmenu';
 import { toast } from 'react-hot-toast';
-
+import './TaskList.css';
 import * as taskService from '~/services/taskService';
 import { CheckIcon, CheckSolidIcon, InputRadioIcon, StarIcon, StarSolidIcon, TrashIcon } from '../Icons';
 
 function TaskList({ tasks, setTasks, reRenderPage, setReRenderPage }) {
+    const [taskIdToDelete, setTaskIdToDelete] = useState(null);
+
     const handleDelete = async (id) => {
-        const data = await taskService.deleteTask(id);
-        if (data.success) {
-            toast.success(data.message);
+        setTaskIdToDelete(id);
+    };
+
+    const confirmDelete = async () => {
+        if (taskIdToDelete) {
+            const data = await taskService.deleteTask(taskIdToDelete);
+            if (data.success) {
+                toast.success(data.message);
+            }
+
+            const tasksAfterDelete = tasks.filter((task) => task._id !== taskIdToDelete);
+            setTasks(tasksAfterDelete);
         }
 
-        const tasksAfterDelete = tasks.filter((task) => task._id !== id);
-        setTasks(tasksAfterDelete);
+        setTaskIdToDelete(null);
+    };
+
+    const cancelDelete = () => {
+        setTaskIdToDelete(null);
     };
 
     const handleTaskNameChange = async (e, task) => {
@@ -124,6 +139,27 @@ function TaskList({ tasks, setTasks, reRenderPage, setReRenderPage }) {
                             </ul>
                         </div>
                     </ContextMenu>
+
+                    {/* Modal Delele */}
+                    {taskIdToDelete === task._id && (
+                        <div>
+                            <div className="overlay"></div>
+                            <div className="confirmation-dialog">
+                                <p className="confirm-h1">Are you sure you want to delete?</p>
+
+                                <div className="btn-container">
+                                    <p className="confirm-p">Delete this task!</p>
+
+                                    <button onClick={cancelDelete} className="cancel-btn">
+                                        Cancel
+                                    </button>
+                                    <button onClick={confirmDelete} className="confirm-btn">
+                                        Delete
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
                 </div>
             ))}
         </div>
