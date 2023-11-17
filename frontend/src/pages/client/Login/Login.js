@@ -54,7 +54,7 @@ function Login() {
     };
 
     return (
-        <section class="bg-gray-50 min-h-screen flex items-center justify-center" style={{backgroundImage: `url(https://wallpapersmug.com/download/2048x1152/22daba/moon-rays-red-space-sky-abstract-mountains.jpg)`,  backgroundRepeat  : 'no-repeat', backgroundPosition: 'center', } }>
+        <section class="bg-gray-50 min-h-screen flex items-center justify-center" style={{ backgroundImage: `url(https://wallpapersmug.com/download/2048x1152/22daba/moon-rays-red-space-sky-abstract-mountains.jpg)`, backgroundRepeat: 'no-repeat', backgroundPosition: 'center', }}>
             <div class="bg-gray-100 flex rounded-2xl shadow-lg w-1/2">
                 <div className="flex flex-col items-center justify-center p-12 max-sm:w-full">
                     <Image src={images.logo} alt="Logo" className="w-24 rounded-md" />
