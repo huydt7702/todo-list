@@ -55,7 +55,7 @@ function Register() {
     };
 
     return (
-        <section class="bg-gray-50 min-h-screen flex items-center justify-center">
+        <section class="bg-gray-300 min-h-screen flex items-center justify-center" style={{backgroundImage: `url(https://wallpapersmug.com/download/2048x1152/7a22c5/forest_mountains_sunset_cool_weather_minimalism.jpg)`,  backgroundRepeat  : 'no-repeat', backgroundPosition: 'center', } }>
             <div class="bg-gray-100 flex rounded-2xl shadow-lg w-1/2">
                 <div className="flex flex-col items-center justify-center p-12 max-sm:w-full">
                     <Image src={images.logo} alt="Logo" className="w-24 rounded-md" />
