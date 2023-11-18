@@ -7,10 +7,11 @@ const cookieParser = require("cookie-parser");
 const authRoute = require("./routes/auth");
 const userRoute = require("./routes/user");
 const taskRoute = require("./routes/task");
+const labelRoute = require("./routes/label");
 dotenv.config();
 
 mongoose
-    .connect(process.env.MONGODB_URL, { useNewUrlParser: true, useUnifiedTopology: true })
+    .connect("mongodb+srv://adminapp:12345@movies-app.2q0wjeh.mongodb.net/test?retryWrites=true&w=majority", { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => {
         console.log("CONNECTED TO MONGO DB");
     })
@@ -27,6 +28,7 @@ mongoose
 app.use("/v1/auth", authRoute);
 app.use("/v1/user", userRoute);
 app.use("/v1/task", taskRoute);
+app.use("/v1/label", labelRoute);
 
 app.listen(8000, () => {
     console.log("Server is running");
