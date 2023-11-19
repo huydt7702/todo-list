@@ -4,23 +4,23 @@ const { verifyToken, verifyTokenAndAdmin, verifyTokenAndUserAuthorization } = re
 const router = require("express").Router();
 
 router.post("/", (req, res) => {
-    labelController.createTask(req, res);
+    labelController.createLabel(req, res);
 });
 
 router.get("/", (req, res) => {
-    labelController.getAllTasks(req, res);
+    labelController.getAllLabels(req, res);
 });
 
 router.get("/:id", (req, res) => {
-    labelController.getTaskById(req, res);
+    labelController.getLabelById(req, res);
 });
 
 router.put("/", (req, res) => {
-    labelController.updateTask(req, res);
+    labelController.updateLabel(req, res);
 });
 
 router.delete("/", (req, res) => {
-    labelController.deleteTask(req, res);
+    labelController.deleteLabel(req, res);
 });
 
 module.exports = router;

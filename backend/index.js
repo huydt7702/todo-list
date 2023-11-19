@@ -11,7 +11,7 @@ const labelRoute = require("./routes/label");
 dotenv.config();
 
 mongoose
-    .connect("mongodb+srv://adminapp:12345@movies-app.2q0wjeh.mongodb.net/test?retryWrites=true&w=majority", { useNewUrlParser: true, useUnifiedTopology: true })
+    .connect(process.env.MONGODB_URL, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => {
         console.log("CONNECTED TO MONGO DB");
     })
@@ -19,10 +19,10 @@ mongoose
         console.error("Error connecting to MongoDB:", error);
     });
 
-    app.use(express.json());
-    app.use(express.urlencoded({ extended: true }));
-    app.use(cors());
-    app.use(cookieParser());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(cors());
+app.use(cookieParser());
 
 //ROUTES
 app.use("/v1/auth", authRoute);
