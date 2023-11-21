@@ -7,6 +7,7 @@ const cookieParser = require("cookie-parser");
 const authRoute = require("./routes/auth");
 const userRoute = require("./routes/user");
 const taskRoute = require("./routes/task");
+const labelRoute = require("./routes/label");
 dotenv.config();
 
 mongoose
@@ -18,15 +19,16 @@ mongoose
         console.error("Error connecting to MongoDB:", error);
     });
 
-    app.use(express.json());
-    app.use(express.urlencoded({ extended: true }));
-    app.use(cors());
-    app.use(cookieParser());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(cors());
+app.use(cookieParser());
 
 //ROUTES
 app.use("/v1/auth", authRoute);
 app.use("/v1/user", userRoute);
 app.use("/v1/task", taskRoute);
+app.use("/v1/label", labelRoute);
 
 app.listen(8000, () => {
     console.log("Server is running");
