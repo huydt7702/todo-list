@@ -16,6 +16,7 @@ const routes = {
     forgotPassword: '/forgot-password',
     resetPassword: '/reset-password',
     profile: '/profile/:id',
+    statistical: '/tasks/statistical',
 };
 
 export default routes;
