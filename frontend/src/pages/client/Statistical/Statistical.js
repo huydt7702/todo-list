@@ -56,7 +56,9 @@ function Statistical({ id }) {
 
     return (
         <React.Fragment>
-            <Bar data={dataChart} />
+            <div>
+                <Bar data={dataChart} />
+            </div>
             <div className="mt-[20px]">
                 <Line data={dataChart} />
             </div>
