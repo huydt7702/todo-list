@@ -1,21 +1,22 @@
-
 .user-table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 20px;
-  }
-  
-  .user-table th, .user-table td {
+}
+
+.user-table th,
+.user-table td {
     border: 1px solid #ddd;
     padding: 8px;
     text-align: left;
-  }
-  
-  .user-table th {
+}
+
+.user-table th {
     background-color: #f2f2f2;
-  }
-  
-  .edit-btn, .delete-btn {
+}
+
+.edit-btn,
+.delete-btn {
     background-color: #4caf50;
     color: #fff;
     padding: 8px 12px;
@@ -23,9 +24,13 @@
     cursor: pointer;
     border: none;
     border-radius: 4px;
-  }
-  
-  .delete-btn {
+}
+
+.delete-btn {
     background-color: #f44336;
-  }
-  
+}
+
+.delete-btn-disabled {
+    pointer-events: none;
+    opacity: 0.2;
+}
