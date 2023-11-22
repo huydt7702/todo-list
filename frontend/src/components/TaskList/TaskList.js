@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import ContentEditable from 'react-contenteditable';
 import { ContextMenu, ContextMenuTrigger } from 'react-contextmenu';
 import { toast } from 'react-hot-toast';
 import './TaskList.css';
@@ -30,14 +29,6 @@ function TaskList({ tasks, setTasks, reRenderPage, setReRenderPage }) {
 
     const cancelDelete = () => {
         setTaskIdToDelete(null);
-    };
-
-    const handleTaskNameChange = async (e, task) => {
-        const formData = {
-            name: e.target.value,
-        };
-
-        await taskService.updateTask(formData, task._id);
     };
 
     const handleMoveToImportant = (task) => {
@@ -82,17 +73,13 @@ function TaskList({ tasks, setTasks, reRenderPage, setReRenderPage }) {
                                 {task.isFinished ? <CheckSolidIcon /> : <InputRadioIcon />}
                             </button>
                             <div className="px-[14px] py-[8px] w-full">
-                                <ContentEditable
-                                    html={task.name}
-                                    tagName="p"
-                                    className={`text-[14px] outline-none outline-offset-0 focus:outline-[#2564cf] ${
-                                        task.isFinished ? 'line-through' : 'no-underline'
-                                    }`}
-                                    onChange={(e) => handleTaskNameChange(e, task)}
-                                />
+                                {task.name}
                                 <p className="text-[12px] text-[#605e5c]">Tác vụ</p>
                             </div>
-                            <span className="text-[#2564cf] px-[4px] py-[2px]" onClick={() => handleMoveToImportant(task)}>
+                            <span
+                                className="text-[#2564cf] px-[4px] py-[2px]"
+                                onClick={() => handleMoveToImportant(task)}
+                            >
                                 {task.isImportant ? <StarSolidIcon /> : <StarIcon />}
                             </span>
                         </div>
@@ -101,11 +88,14 @@ function TaskList({ tasks, setTasks, reRenderPage, setReRenderPage }) {
                     <ContextMenu id={task._id}>
                         <div className="py-[6px] rounded-[4px] bg-white shadow-[rgba(0,0,0,0.133)_0px_3.2px_7.2px_0px]">
                             <ul>
-                                <li className="flex items-center px-[12px] h-[36px] hover:bg-[#f5f5f5] cursor-pointer" onClick={() => handleMoveToImportant(task)}>
+                                <li
+                                    className="flex items-center px-[12px] h-[36px] hover:bg-[#f5f5f5] cursor-pointer"
+                                    onClick={() => handleMoveToImportant(task)}
+                                >
                                     <span className="mx-[4px]">
                                         <StarIcon />
                                     </span>
-                                    <span className="mx-[4px] px-[4px] text-[14px]" >
+                                    <span className="mx-[4px] px-[4px] text-[14px]">
                                         {task.isImportant ? 'Loại bỏ mức độ quan trọng' : 'Đánhh dấu là quan trọng'}
                                     </span>
                                 </li>
@@ -113,7 +103,10 @@ function TaskList({ tasks, setTasks, reRenderPage, setReRenderPage }) {
                                     <span className="mx-[4px]">
                                         <CheckIcon />
                                     </span>
-                                    <span className="mx-[4px] px-[4px] text-[14px]" onClick={() => handleMoveToFinished(task)}>
+                                    <span
+                                        className="mx-[4px] px-[4px] text-[14px]"
+                                        onClick={() => handleMoveToFinished(task)}
+                                    >
                                         {task.isFinished ? 'Đánh dấu là chưa hoàn thành' : 'Đánhh dấu là đã hoàn thành'}
                                     </span>
                                 </li>
