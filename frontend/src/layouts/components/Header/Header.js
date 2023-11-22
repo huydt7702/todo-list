@@ -59,7 +59,7 @@ function Header({ currentUser }) {
                 <div className="flex items-center">
                     <Image
                         className="m-[20px] shrink-0 rounded-full w-[88px] h-[88px] object-cover border-[1px] border-solid border-[#777]"
-                        src={avatar || ''}
+                        src={avatar || currentUser?.avatar || ''}
                         alt="Avatar"
                     />
 
@@ -127,7 +127,7 @@ function Header({ currentUser }) {
                     >
                         <Image
                             className="rounded-full w-[32px] h-[32px] object-cover border-[1px] border-solid border-white"
-                            src={avatar || ''}
+                            src={avatar || currentUser?.avatar || ''}
                             alt="Avatar"
                         />
                     </HeadlessTippy>
