@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import { useState } from 'react';
+import ContentEditable from 'react-contenteditable';
 import { ContextMenu, ContextMenuTrigger } from 'react-contextmenu';
 import { toast } from 'react-hot-toast';
-import './TaskList.css';
+
 import * as taskService from '~/services/taskService';
 import { CheckIcon, CheckSolidIcon, InputRadioIcon, StarIcon, StarSolidIcon, TrashIcon } from '../Icons';
+import './TaskList.css';
 
 function TaskList({ tasks, setTasks, reRenderPage, setReRenderPage }) {
     const [taskIdToDelete, setTaskIdToDelete] = useState(null);
@@ -29,6 +31,14 @@ function TaskList({ tasks, setTasks, reRenderPage, setReRenderPage }) {
 
     const cancelDelete = () => {
         setTaskIdToDelete(null);
+    };
+
+    const handleTaskNameChange = async (e, task) => {
+        const formData = {
+            name: e.target.value,
+        };
+
+        await taskService.updateTask(formData, task._id);
     };
 
     const handleMoveToImportant = (task) => {
@@ -73,7 +83,14 @@ function TaskList({ tasks, setTasks, reRenderPage, setReRenderPage }) {
                                 {task.isFinished ? <CheckSolidIcon /> : <InputRadioIcon />}
                             </button>
                             <div className="px-[14px] py-[8px] w-full">
-                                {task.name}
+                                <ContentEditable
+                                    html={task.name}
+                                    tagName="p"
+                                    className={`text-[14px] outline-none outline-offset-0 focus:outline-[#2564cf] ${
+                                        task.isFinished ? 'line-through' : 'no-underline'
+                                    }`}
+                                    onChange={(e) => handleTaskNameChange(e, task)}
+                                />
                                 <p className="text-[12px] text-[#605e5c]">Tác vụ</p>
                             </div>
                             <span
