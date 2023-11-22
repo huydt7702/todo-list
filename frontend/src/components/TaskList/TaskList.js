@@ -92,7 +92,10 @@ function TaskList({ tasks, setTasks, reRenderPage, setReRenderPage }) {
                                 />
                                 <p className="text-[12px] text-[#605e5c]">Tác vụ</p>
                             </div>
-                            <span className="text-[#2564cf] px-[4px] py-[2px]" onClick={() => handleMoveToImportant(task)}>
+                            <span
+                                className="text-[#2564cf] px-[4px] py-[2px]"
+                                onClick={() => handleMoveToImportant(task)}
+                            >
                                 {task.isImportant ? <StarSolidIcon /> : <StarIcon />}
                             </span>
                         </div>
@@ -101,11 +104,14 @@ function TaskList({ tasks, setTasks, reRenderPage, setReRenderPage }) {
                     <ContextMenu id={task._id}>
                         <div className="py-[6px] rounded-[4px] bg-white shadow-[rgba(0,0,0,0.133)_0px_3.2px_7.2px_0px]">
                             <ul>
-                                <li className="flex items-center px-[12px] h-[36px] hover:bg-[#f5f5f5] cursor-pointer" onClick={() => handleMoveToImportant(task)}>
+                                <li
+                                    className="flex items-center px-[12px] h-[36px] hover:bg-[#f5f5f5] cursor-pointer"
+                                    onClick={() => handleMoveToImportant(task)}
+                                >
                                     <span className="mx-[4px]">
                                         <StarIcon />
                                     </span>
-                                    <span className="mx-[4px] px-[4px] text-[14px]" >
+                                    <span className="mx-[4px] px-[4px] text-[14px]">
                                         {task.isImportant ? 'Loại bỏ mức độ quan trọng' : 'Đánhh dấu là quan trọng'}
                                     </span>
                                 </li>
@@ -113,7 +119,10 @@ function TaskList({ tasks, setTasks, reRenderPage, setReRenderPage }) {
                                     <span className="mx-[4px]">
                                         <CheckIcon />
                                     </span>
-                                    <span className="mx-[4px] px-[4px] text-[14px]" onClick={() => handleMoveToFinished(task)}>
+                                    <span
+                                        className="mx-[4px] px-[4px] text-[14px]"
+                                        onClick={() => handleMoveToFinished(task)}
+                                    >
                                         {task.isFinished ? 'Đánh dấu là chưa hoàn thành' : 'Đánhh dấu là đã hoàn thành'}
                                     </span>
                                 </li>
@@ -136,16 +145,16 @@ function TaskList({ tasks, setTasks, reRenderPage, setReRenderPage }) {
                         <div>
                             <div className="overlay"></div>
                             <div className="confirmation-dialog">
-                                <p className="confirm-h1">Are you sure you want to delete?</p>
+                                <p className="confirm-h1">Bạn có chắc chắn muốn xóa?</p>
 
                                 <div className="btn-container">
-                                    <p className="confirm-p">Delete this task!</p>
+                                    <p className="confirm-p">Xóa nhiệm vụ này!</p>
 
                                     <button onClick={cancelDelete} className="cancel-btn">
-                                        Cancel
+                                        Hủy
                                     </button>
                                     <button onClick={confirmDelete} className="confirm-btn">
-                                        Delete
+                                        Xóa
                                     </button>
                                 </div>
                             </div>
