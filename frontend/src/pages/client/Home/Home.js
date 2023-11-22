@@ -10,7 +10,7 @@ function Home() {
             </div>
             <div className="flex flex-col justify-center items-center my-[80px]">
                 <img src={images.logov2} alt="Logo" width={100} />
-                <h2 className="text-[42px] font-light mt-[20px]">Huydt To Do</h2>
+                <h2 className="text-[42px] font-light mt-[20px]">To Do</h2>
                 <p className="mt-[20px] mb-[16px] text-center text-[18px]">
                     To Do mang đến cho bạn sự tập trung, từ công việc cho đến giải trí.
                 </p>

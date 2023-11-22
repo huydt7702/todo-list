@@ -21,6 +21,7 @@ import Settings from '~/pages/client/Settings';
 import ForgotPassword from '~/pages/client/ForgotPassword/ForgotPassword';
 import ResetPassword from '~/pages/client/ForgotPassword/ResetPassword';
 import Profile from '~/pages/client/Profile/Profile';
+import Statistical from '~/pages/client/Statistical';
 
 // Public routes
 const publicRoutes = [
@@ -42,6 +43,7 @@ const privateRoutes = [
     { path: config.routes.inbox, component: Inbox },
     { path: config.routes.settings, component: Settings, layout: HeaderOnly },
     { path: config.routes.profile, component: Profile },
+    { path: config.routes.statistical, component: Statistical },
 ];
 
 // Admin routes

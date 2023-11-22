@@ -1,11 +1,33 @@
-import React, { useState } from 'react';
+import { yupResolver } from '@hookform/resolvers/yup';
 import axios from 'axios';
+import { useForm } from 'react-hook-form';
 import { toast } from 'react-hot-toast';
+import * as Yup from 'yup';
+
+import ErrorMessage from '~/components/ErrorMessage';
+
 const ForgotPassword = () => {
-    const [email, setEmail] = useState('');
-    console.log(email);
-    const handleSunmit = async () => {
+    const schema = Yup.object().shape({
+        email: Yup.string().required().email(),
+    });
+
+    const {
+        register,
+        formState: { errors },
+        handleSubmit,
+    } = useForm({
+        mode: 'onChange',
+        resolver: yupResolver(schema),
+        defaultValues: {
+            email: '',
+        },
+    });
+
+    const { email } = errors;
+
+    const onSubmitForm = async ({ email }) => {
         try {
+            toast.success('Please check your email');
             await axios.post(
                 'v1/auth/forgot-password',
                 { email },
@@ -15,32 +37,36 @@ const ForgotPassword = () => {
                     },
                 },
             );
-            toast.success('Please check your email');
         } catch (error) {
             console.log(error);
             toast.error(error.response.data.message);
         }
     };
-    return (
-        <div>
-            <div className="flex flex-col items-center justify-center p-12 max-sm:w-full">
-                <h1 className="mt-6 mb-2 text-3xl font-semibold">Forgot Password</h1>
-                <p className="text-[#555] text-2xl">Please enter your email.</p>
 
-                <div className="flex flex-col items-center w-full gap-4 mt-10">
-                    <input
-                        className="w-full text-2xl p-4 border-[1px] border-solid border-[#999] rounded-md"
-                        type="text"
-                        name="email"
-                        onChange={(e) => setEmail(e.target.value)}
-                        placeholder="Enter your email"
-                    />
-                    <button
-                        onClick={handleSunmit}
-                        className="w-full text-2xl p-4 border-[1px] border-solid border-[#999] rounded-md"
-                    >
-                        Submit
-                    </button>
+    return (
+        <div className="flex flex-col justify-center h-screen align-items ">
+            <div className="flex flex-col items-center justify-center p-8 ">
+                <div className="flex flex-col items-center w-full">
+                    <div className="flex flex-col items-center gap-4 mt-10 w-2/5 p-10 pl-12 pr-12 border-1 rounded-lg shadow-[8px_8px_50px_rgba(3,0,71,0.09)] ">
+                        <h1 className="mt-6 mb-2 text-3xl font-semibold">Forgot Password</h1>
+                        <p className="text-[#555] text-2xl">Please enter your email.</p>
+                        <div className="w-full">
+                            <input
+                                className="w-full text-2xl p-4 border-[1px] border-solid border-[#999] rounded-md"
+                                type="text"
+                                name="email"
+                                {...register('email')}
+                                placeholder="Enter your email"
+                            />
+                            <ErrorMessage name={email} />
+                        </div>
+                        <button
+                            onClick={handleSubmit(onSubmitForm)}
+                            className="w-full text-2xl p-4 bg-[#2564CF] text-white font-medium border-[1px] border-solid border-[#999] rounded-md hover:opacity-80"
+                        >
+                            Submit
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>

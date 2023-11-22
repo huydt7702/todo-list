@@ -55,75 +55,77 @@ function Register() {
     };
 
     return (
-        <div className="flex h-screen">
-            <div className="flex flex-col items-center justify-center p-12 max-sm:w-full">
-                <Image src={images.logo} alt="Logo" className="w-24 rounded-md" />
-                <h1 className="mt-6 mb-2 text-3xl font-semibold">Create an account</h1>
-                <p className="text-[#555] text-2xl">Let's get started with your 30 day free trial.</p>
+        <section class="bg-gray-300 min-h-screen flex items-center justify-center" style={{backgroundImage: `url(https://wallpapersmug.com/download/2048x1152/7a22c5/forest_mountains_sunset_cool_weather_minimalism.jpg)`,  backgroundRepeat  : 'no-repeat', backgroundPosition: 'center', } }>
+            <div class="bg-gray-100 flex rounded-2xl shadow-lg w-1/2">
+                <div className="flex flex-col items-center justify-center p-12 max-sm:w-full">
+                    <Image src={images.logo} alt="Logo" className="w-24 rounded-md" />
+                    <h1 className="mt-6 mb-2 text-3xl font-semibold">Create an account</h1>
+                    <p className="text-[#555] text-2xl">Sign Up to Get Started.</p>
 
-                <form className="flex flex-col items-center w-full gap-4 mt-10" onSubmit={handleSubmit(onSubmitForm)}>
-                    <div className="flex flex-col w-full">
-                        <input
-                            className="w-full text-2xl p-4 border-[1px] border-solid border-[#999] rounded-md"
-                            type="text"
-                            name="username"
-                            placeholder="Enter your username"
-                            {...register('username')}
-                        />
-                        <ErrorMessage name={username} />
-                    </div>
-                    <div className="flex flex-col w-full">
-                        <input
-                            className="w-full text-2xl p-4 border-[1px] border-solid border-[#999] rounded-md"
-                            type="email"
-                            name="email"
-                            placeholder="Enter your email"
-                            {...register('email')}
-                        />
-                        <ErrorMessage name={email} />
-                    </div>
-                    <div className="flex flex-col w-full">
-                        <input
-                            className="w-full text-2xl p-4 border-[1px] border-solid border-[#999] rounded-md"
-                            type="password"
-                            name="password"
-                            placeholder="Enter your password"
-                            {...register('password')}
-                        />
-                        <ErrorMessage name={password} />
-                    </div>
-                    <button className="bg-[#333] border-[1px] border-solid border-[#333] text-white w-full p-4 rounded-md text-2xl hover:bg-opacity-90">
-                        Create account
-                    </button>
-                </form>
+                    <form className="flex flex-col items-center w-full gap-4 mt-10" onSubmit={handleSubmit(onSubmitForm)}>
+                        <div className="flex flex-col w-full">
+                            <input
+                                className="w-full text-2xl p-4 border-[1px] border-solid border-[#999] rounded-md"
+                                type="text"
+                                name="username"
+                                placeholder="Enter your username"
+                                {...register('username')}
+                            />
+                            <ErrorMessage name={username} />
+                        </div>
+                        <div className="flex flex-col w-full">
+                            <input
+                                className="w-full text-2xl p-4 border-[1px] border-solid border-[#999] rounded-md"
+                                type="email"
+                                name="email"
+                                placeholder="Enter your email"
+                                {...register('email')}
+                            />
+                            <ErrorMessage name={email} />
+                        </div>
+                        <div className="flex flex-col w-full">
+                            <input
+                                className="w-full text-2xl p-4 border-[1px] border-solid border-[#999] rounded-md"
+                                type="password"
+                                name="password"
+                                placeholder="Enter your password"
+                                {...register('password')}
+                            />
+                            <ErrorMessage name={password} />
+                        </div>
+                        <button className="bg-[#333] border-[1px] border-solid border-[#333] text-white w-full p-4 rounded-md text-2xl hover:bg-opacity-90">
+                            Create account
+                        </button>
+                    </form>
 
-                <span className="my-6 text-[#555] text-2xl">OR</span>
+                    <span className="my-6 text-[#555] text-2xl">-----OR-----</span>
 
-                <div className="flex flex-col items-center w-full gap-4">
-                    <button
-                        className="bg-white border-[1px] border-solid border-[#ccc] text-2xl text-[#333] w-full p-4 rounded-md hover:bg-[rgba(0,0,0,0.05)]"
-                        onClick={handleSignUpGoogle}
-                    >
-                        <FontAwesomeIcon icon={faGoogle} className="text-red-600" />
-                        <span className="ml-3">Sign up with Google</span>
-                    </button>
+                    <div className="flex flex-col items-center w-full gap-4">
+                        <button
+                            className="bg-white border-[1px] border-solid border-[#ccc] text-2xl text-[#333] w-full p-4 rounded-md hover:bg-[rgba(0,0,0,0.05)]"
+                            onClick={handleSignUpGoogle}
+                        >
+                            <FontAwesomeIcon icon={faGoogle} className="text-red-600" />
+                            <span className="ml-3">Sign up with Google</span>
+                        </button>
+                    </div>
+
+                    <p className="mt-8 text-2xl">
+                        Already have an account?{' '}
+                        <Link className="font-medium" to={config.routes.login}>
+                            Login
+                        </Link>
+                    </p>
                 </div>
-
-                <p className="mt-8 text-2xl">
-                    Already have an account?{' '}
-                    <Link className="font-medium" to={config.routes.login}>
-                        Login
-                    </Link>
-                </p>
+                <div className="flex-1 max-sm:hidden p-8">
+                    <Image
+                        className="object-cover rounded-2xl h-full"
+                        src={images.backgroundRegister}
+                        alt="Register background"
+                    />
+                </div>
             </div>
-            <div className="flex-1 max-sm:hidden">
-                <Image
-                    className="rounded-tl-[60px] rounded-bl-[60px] object-cover h-screen w-full"
-                    src={images.backgroundRegister}
-                    alt="Register background"
-                />
-            </div>
-        </div>
+        </section>
     );
 }
 
