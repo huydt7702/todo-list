@@ -1,4 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useMutation } from '@tanstack/react-query';
+import { LoadingButton } from '@mui/lab';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -51,19 +53,26 @@ const Profile = () => {
         setAvatarUrl(URL.createObjectURL(e.target.files[0]));
     };
 
-    const handleUpdate = async (data) => {
-        try {
-            await axios.put(`/v1/user/${id}`, data, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                    token: `Bearer ${token}`,
-                },
-            });
-            toast.success('Cập nhật hồ sơ thành công!');
-        } catch (error) {
-            console.log(error);
-        }
-    };
+    const handleUpdate = (data) =>
+        axios.put(`/v1/user/${id}`, data, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+                token: `Bearer ${token}`,
+            },
+        });
+
+    const updateProfile = useMutation({
+        mutationFn: (data) => handleUpdate(data),
+        onSuccess: ({ data }) => {
+            if (data.success) {
+                toast.success('Cập nhật hồ sơ thành công');
+                window.location.reload();
+            }
+        },
+        onError: ({ response: { data } }) => {
+            toast.error(data.message);
+        },
+    });
 
     return (
         <div className="w-[500px] mx-auto">
@@ -72,7 +81,7 @@ const Profile = () => {
                 <p className="text-[#555] text-2xl">Please enter your details.</p>
                 <form
                     className="flex flex-col items-center w-full gap-4 mt-10"
-                    onSubmit={handleSubmit(handleUpdate)}
+                    onSubmit={handleSubmit(updateProfile.mutate)}
                     encType="multipart/form-data"
                 >
                     <div className="w-full">
@@ -121,12 +130,14 @@ const Profile = () => {
                         alt="Avatar"
                     />
 
-                    <button
+                    <LoadingButton
                         type="submit"
-                        className="w-[130px] text-2xl p-4 rounded-md bg-[#2564cf] text-white hover:bg-opacity-80"
+                        loading={updateProfile.isLoading}
+                        variant="contained"
+                        style={{ padding: '10px', width: 120, marginTop: '10px', fontSize: '12px' }}
                     >
                         Submit
-                    </button>
+                    </LoadingButton>
                 </form>
             </div>
         </div>
