@@ -1,13 +1,11 @@
-import HeadlessTippy from '@tippyjs/react/headless';
-import { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { connect } from 'react-redux';
-
 import { ClearIcon, SearchIcon } from '~/components/Icons';
 import TaskList from '~/components/TaskList';
 import { useDebounce } from '~/hooks';
 import * as taskService from '~/services/taskService';
 
-function Search({ id }) {
+const Search = ({ id }) => {
     const inputRef = useRef();
     const [searchValue, setSearchValue] = useState('');
     const [searchResult, setSearchResult] = useState([]);
@@ -24,16 +22,14 @@ function Search({ id }) {
         }
 
         (async () => {
-            const { data } = await taskService.getAllTasks();
-            const listTaskOfUserId = data.filter((task) => task.userId === (userId ?? id));
-
-            setSearchResult((prev) => {
-                return listTaskOfUserId.filter((task) => task.name.includes(debouncedValue));
-            });
+            try {
+                const result = await taskService.searchTasks(userId ?? id, debouncedValue);
+                setSearchResult(result);
+            } catch (error) {
+                console.error('Error searching tasks:', error);
+            }
         })();
-
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [debouncedValue]);
+    }, [debouncedValue, userId, id]);
 
     const handleChange = (e) => {
         const searchValue = e.target.value;
@@ -46,18 +42,31 @@ function Search({ id }) {
     const handleClear = () => {
         setSearchValue('');
         setSearchResult([]);
-
         inputRef.current.focus();
     };
 
+    const handleSearchResultClick = (task) => {
+        console.log('Selected task:', task);
+        // Thực hiện các hành động mong muốn khi chọn một mục
+    };
+
     const renderResult = () => {
+        if (!debouncedValue.trim()) {
+            return <div className="no-result-message">Vui lòng nhập từ khóa tìm kiếm.</div>;
+        }
+
+        if (searchResult.length === 0) {
+            return <div className="no-result-message">Không có kết quả tìm kiếm.</div>;
+        }
+
         return (
-            <TaskList
-                tasks={searchResult}
-                setTasks={setSearchResult}
-                reRenderPage={reRenderPage}
-                setReRenderPage={setReRenderPage}
-            />
+            <ul className="search-results-list">
+                {searchResult.map((task) => (
+                    <li key={task.id} className="search-result-item" onClick={() => handleSearchResultClick(task)}>
+                        {task.name}
+                    </li>
+                ))}
+            </ul>
         );
     };
 
@@ -66,15 +75,9 @@ function Search({ id }) {
     };
 
     return (
-        <HeadlessTippy
-            visible={showResult && searchResult.length > 0}
-            offset={[0, -2]}
-            placement="bottom-start"
-            render={renderResult}
-            onClickOutside={handleHideResult}
-        >
-            <div className="relative flex items-center  w-[800px]  rounded-lg max-sm:w-[300px] max-2xl:w-[700px]  max-[1380px]:w-[600px] max-[1230px]:w-[500px] max-[1120px]:w-[400px]  border-2 border-indigo-300">
-                <span className="absolute top-0 lef-0 bottom-0 flex items-center justify-center px-[8px] cursor-pointer text-[#2564cf] hover:bg-[rgba(0,0,0,0.05)] transition-colors">
+        <div className="relative w-[800px] mx-auto mt-8">
+            <div className="relative flex items-center rounded-lg border-2 border-indigo-300">
+                <span className="absolute top-0 left-0 bottom-0 flex items-center justify-center px-2 cursor-pointer text-[#2564cf] hover:bg-[rgba(0,0,0,0.05)] transition-colors">
                     <SearchIcon />
                 </span>
                 <input
@@ -82,23 +85,28 @@ function Search({ id }) {
                     value={searchValue}
                     ref={inputRef}
                     spellCheck={false}
-                    placeholder="Search Task..."
-                    className="flex-1 py-[8px] px-[60px] h-[50px] rounded-lg text-2xl max-lg:h-[30px] max-lg:text-xl border-cyan-400"
+                    placeholder="Bạn Tìm Gì?..."
+                    className="flex-1 py-2 px-12 rounded-lg text-xl border-cyan-400"
                     onChange={handleChange}
                     onFocus={() => setShowResult(true)}
                 />
                 {searchValue && (
                     <span
-                        className="absolute  top-0 bottom-0 right-0 flex items-center justify-center px-[8px] cursor-pointer text-[#2564cf] hover:bg-[rgba(0,0,0,0.05)] transition-colors"
+                        className="absolute top-0 bottom-0 right-0 flex items-center justify-center px-2 cursor-pointer text-[#2564cf] hover:bg-[rgba(0,0,0,0.05)] transition-colors"
                         onClick={handleClear}
                     >
                         <ClearIcon />
                     </span>
                 )}
             </div>
-        </HeadlessTippy>
+            {showResult && searchResult.length > 0 && (
+                <div className="absolute z-10 mt-2 w-full bg-white shadow-lg rounded-md overflow-hidden">
+                    {renderResult()}
+                </div>
+            )}
+        </div>
     );
-}
+};
 
 const mapStateToProps = (state) => {
     return {

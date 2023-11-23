@@ -56,3 +56,17 @@ export const deleteTask = async (id) => {
         console.log(error);
     }
 };
+//search.task
+export const searchTasks = async (userId, keyword) => {
+    try {
+        console.log('Calling searchTasks with userId:', userId, 'and keyword:', keyword);
+        const response = await httpRequest.get('task', {
+            params: { userId, keyword },
+        });
+        console.log('Search response:', response.data);
+        return response.data;
+    } catch (error) {
+        console.error('Error searching tasks:', error);
+        throw error;
+    }
+};
