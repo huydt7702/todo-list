@@ -2,12 +2,17 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { ContextMenu, ContextMenuTrigger } from 'react-contextmenu';
 import { toast } from 'react-hot-toast';
+
 import './TaskList.css';
 import * as taskService from '~/services/taskService';
 import { CheckIcon, CheckSolidIcon, InputRadioIcon, StarIcon, StarSolidIcon, TrashIcon } from '../Icons';
 
 function TaskList({ tasks, setTasks, reRenderPage, setReRenderPage }) {
     const [taskIdToDelete, setTaskIdToDelete] = useState(null);
+
+    const handleDelete = async (id) => {
+        setTaskIdToDelete(id);
+    };
 
     const confirmDelete = async () => {
         if (taskIdToDelete) {
@@ -107,7 +112,7 @@ function TaskList({ tasks, setTasks, reRenderPage, setReRenderPage }) {
                                     </span>
                                 </li>
                                 <li className="my-[6px] border-b border-solid border-[#e1dfdd] bg-[#e1dfdd]"></li>
-                                <li className="flex items-center px-[12px] h-[36px] text-[#a80000] hover:bg-[#f5f5f5] cursor-pointer">
+                                <li className="flex items-center px-[12px] h-[36px] text-[#a80000] hover:bg-[#f5f5f5] cursor-pointer" onClick={() => handleDelete(task._id)}>
                                     <span className="mx-[4px]">
                                         <TrashIcon />
                                     </span>
