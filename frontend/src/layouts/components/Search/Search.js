@@ -1,8 +1,12 @@
+import { faTasks } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import HeadlessTippy from '@tippyjs/react/headless';
 import { useEffect, useRef, useState } from 'react';
 import { connect } from 'react-redux';
 
+import images from '~/assets/images';
 import { ClearIcon, SearchIcon } from '~/components/Icons';
+import Image from '~/components/Image';
 import TaskList from '~/components/TaskList';
 import { useDebounce } from '~/hooks';
 import * as taskService from '~/services/taskService';
@@ -15,7 +19,7 @@ function Search({ id }) {
     const [reRenderPage, setReRenderPage] = useState(false);
     const userId = localStorage.getItem('userId');
 
-    const debouncedValue = useDebounce(searchValue, 500);
+    const debouncedValue = useDebounce(searchValue, 700);
 
     useEffect(() => {
         if (!debouncedValue.trim()) {
@@ -52,12 +56,24 @@ function Search({ id }) {
 
     const renderResult = () => {
         return (
-            <TaskList
-                tasks={searchResult}
-                setTasks={setSearchResult}
-                reRenderPage={reRenderPage}
-                setReRenderPage={setReRenderPage}
-            />
+            <div className="bg-white w-[600px] shadow-[0_24px_54px_rgba(0,0,0,0.15)] rounded-[4px] p-[12px] max-sm:hidden">
+                <h3 className="text-[15px] font-medium">
+                    <FontAwesomeIcon className="text-[#2564cf]" icon={faTasks} /> Tìm kiếm: <span>"{searchValue}"</span>
+                </h3>
+                {searchResult.length > 0 ? (
+                    <TaskList
+                        tasks={searchResult}
+                        setTasks={setSearchResult}
+                        reRenderPage={reRenderPage}
+                        setReRenderPage={setReRenderPage}
+                    />
+                ) : (
+                    <div>
+                        <Image src={images.monkey} alt="Tasks not found" className="mx-auto mt-[60px]" />
+                        <p className="text-center mt-[10px] font-medium">Không có tác vụ nào được tìm thấy</p>
+                    </div>
+                )}
+            </div>
         );
     };
 
@@ -67,14 +83,14 @@ function Search({ id }) {
 
     return (
         <HeadlessTippy
-            visible={showResult && searchResult.length > 0}
-            offset={[0, -2]}
+            visible={showResult}
+            offset={[0, 2]}
             placement="bottom-start"
             render={renderResult}
             onClickOutside={handleHideResult}
         >
-            <div className="relative flex items-center w-[400px] max-sm:hidden">
-                <span className="absolute top-0 lef-0 bottom-0 flex items-center justify-center px-[8px] cursor-pointer text-[#2564cf] hover:bg-[rgba(0,0,0,0.05)] transition-colors">
+            <div className="relative flex items-center w-[600px] max-sm:hidden">
+                <span className="absolute top-0 lef-0 bottom-0 flex items-center justify-center px-[8px] text-[#2564cf]">
                     <SearchIcon />
                 </span>
                 <input
@@ -87,7 +103,7 @@ function Search({ id }) {
                     onChange={handleChange}
                     onFocus={() => setShowResult(true)}
                 />
-                {searchValue && (
+                {!!searchValue && (
                     <span
                         className="absolute top-0 bottom-0 right-0 flex items-center justify-center px-[8px] cursor-pointer text-[#2564cf] hover:bg-[rgba(0,0,0,0.05)] transition-colors"
                         onClick={handleClear}
