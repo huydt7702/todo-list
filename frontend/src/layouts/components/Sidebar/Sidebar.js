@@ -11,7 +11,16 @@ import { connect, useDispatch } from 'react-redux';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
 
-import { BarsIcon, CheckIcon, HomeIcon, SearchIcon, SignOutIcon, StarIcon, TheSunIcon } from '~/components/Icons';
+import {
+    BarsIcon,
+    CheckIcon,
+    HomeIcon,
+    SearchIcon,
+    SignOutIcon,
+    StarIcon,
+    TheSunIcon,
+    WatchIcon,
+} from '~/components/Icons';
 import config from '~/config';
 import { createAxios } from '~/createInstance';
 import { handleSignOut } from '~/firebaseConfig';
@@ -48,6 +57,12 @@ const sidebarList = [
     },
     {
         id: 5,
+        icon: WatchIcon,
+        to: config.routes.statistical,
+        title: 'Thống kê',
+    },
+    {
+        id: 6,
         icon: SignOutIcon,
         title: 'Đăng xuất',
     },
