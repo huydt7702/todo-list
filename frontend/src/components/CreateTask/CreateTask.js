@@ -1,7 +1,13 @@
+import Skeleton from '@mui/material/Skeleton';
+import { useQuery } from '@tanstack/react-query';
+import axios from 'axios';
 import PropTypes from 'prop-types';
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
+import { toast } from 'react-hot-toast';
 import { connect } from 'react-redux';
 
+import images from '~/assets/images';
+import Image from '~/components/Image';
 import * as taskService from '~/services/taskService';
 import { CalendarIcon, InputRadioIcon, NotifyIcon, RepeatIcon } from '../Icons';
 import TaskList from '../TaskList';
@@ -9,32 +15,36 @@ import TaskList from '../TaskList';
 function CreateTask({ id, important = false, finished = false }) {
     const taskInputRef = useRef();
     const [taskInput, setTaskInput] = useState('');
-    const [tasks, setTasks] = useState([]);
+    const [tasks, setTasks] = useState([{}]);
     const [reRenderPage, setReRenderPage] = useState(false);
     const userId = localStorage.getItem('userId');
 
-    useEffect(() => {
-        (async () => {
-            const { data } = await taskService.getAllTasks();
-            const listTaskOfUserId = data.filter((task) => {
-                return task.userId === (userId ?? id);
-            });
-            const listNormalTask = listTaskOfUserId.filter((task) => !task.isFinished);
+    const { isLoading } = useQuery({
+        queryKey: ['createTask', reRenderPage],
+        queryFn: () => axios.get('/v1/task'),
+        onSuccess: ({ data: { data, success } }) => {
+            if (success) {
+                const listTaskOfUserId = data.filter((task) => {
+                    return task.userId === (userId ?? id);
+                });
+                const listNormalTask = listTaskOfUserId.filter((task) => !task.isFinished);
 
-            setTasks(() => {
-                if (important) {
-                    const listImportantTask = listTaskOfUserId.filter((task) => task.isImportant && !task.isFinished);
-                    return listImportantTask;
-                } else if (finished) {
-                    const listFinishedTask = listTaskOfUserId.filter((task) => task.isFinished);
-                    return listFinishedTask;
-                }
+                setTasks(() => {
+                    if (important) {
+                        const listImportantTask = listTaskOfUserId.filter(
+                            (task) => task.isImportant && !task.isFinished,
+                        );
+                        return listImportantTask;
+                    } else if (finished) {
+                        const listFinishedTask = listTaskOfUserId.filter((task) => task.isFinished);
+                        return listFinishedTask;
+                    }
 
-                return listNormalTask;
-            });
-        })();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [reRenderPage]);
+                    return listNormalTask;
+                });
+            }
+        },
+    });
 
     const handleTaskInputChange = (e) => {
         const taskValue = e.target.value;
@@ -53,11 +63,20 @@ function CreateTask({ id, important = false, finished = false }) {
             userId: userId ?? id,
         };
 
-        const { data } = await taskService.createTask(formData);
-        setTasks([...tasks, data]);
+        try {
+            const { data, success } = await taskService.createTask(formData);
+            if (success) {
+                setTasks([...tasks, data]);
+                toast.success('Đã thêm công việc thành công!');
+            } else {
+                toast.error('Không thể thêm công việc. Vui lòng thử lại!');
+            }
 
-        setTaskInput('');
-        taskInputRef.current.focus();
+            setTaskInput('');
+            taskInputRef.current.focus();
+        } catch (error) {
+            console.error('Lỗi khi tạo tác vụ:', error);
+        }
     };
 
     const handleCreateTask = () => {
@@ -111,8 +130,36 @@ function CreateTask({ id, important = false, finished = false }) {
                     </div>
                 </div>
             )}
-
-            <TaskList tasks={tasks} setTasks={setTasks} reRenderPage={reRenderPage} setReRenderPage={setReRenderPage} />
+            {isLoading ? (
+                <>
+                    {Array(5)
+                        .fill(null)
+                        .map((_, key) => (
+                            <Skeleton
+                                key={key}
+                                variant="rectangular"
+                                style={{ width: '100%', marginTop: '8px', borderRadius: '4px' }}
+                                height={55}
+                            />
+                        ))}
+                </>
+            ) : (
+                <>
+                    {tasks.length > 0 ? (
+                        <TaskList
+                            tasks={tasks}
+                            setTasks={setTasks}
+                            reRenderPage={reRenderPage}
+                            setReRenderPage={setReRenderPage}
+                        />
+                    ) : (
+                        <div>
+                            <Image src={images.monkey} alt="Tasks not found" className="mx-auto mt-[60px]" />
+                            <p className="text-center mt-[10px] font-medium">Không có tác vụ nào được tìm thấy</p>
+                        </div>
+                    )}
+                </>
+            )}
         </div>
     );
 }

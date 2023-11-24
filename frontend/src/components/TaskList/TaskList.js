@@ -2,12 +2,17 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { ContextMenu, ContextMenuTrigger } from 'react-contextmenu';
 import { toast } from 'react-hot-toast';
+
 import './TaskList.css';
 import * as taskService from '~/services/taskService';
 import { CheckIcon, CheckSolidIcon, InputRadioIcon, StarIcon, StarSolidIcon, TrashIcon } from '../Icons';
 
 function TaskList({ tasks, setTasks, reRenderPage, setReRenderPage }) {
     const [taskIdToDelete, setTaskIdToDelete] = useState(null);
+
+    const handleDelete = async (id) => {
+        setTaskIdToDelete(id);
+    };
 
     const confirmDelete = async () => {
         if (taskIdToDelete) {
@@ -107,7 +112,7 @@ function TaskList({ tasks, setTasks, reRenderPage, setReRenderPage }) {
                                     </span>
                                 </li>
                                 <li className="my-[6px] border-b border-solid border-[#e1dfdd] bg-[#e1dfdd]"></li>
-                                <li className="flex items-center px-[12px] h-[36px] text-[#a80000] hover:bg-[#f5f5f5] cursor-pointer">
+                                <li className="flex items-center px-[12px] h-[36px] text-[#a80000] hover:bg-[#f5f5f5] cursor-pointer" onClick={() => handleDelete(task._id)}>
                                     <span className="mx-[4px]">
                                         <TrashIcon />
                                     </span>
@@ -122,16 +127,16 @@ function TaskList({ tasks, setTasks, reRenderPage, setReRenderPage }) {
                         <div>
                             <div className="overlay"></div>
                             <div className="confirmation-dialog">
-                                <p className="confirm-h1">Are you sure you want to delete?</p>
+                                <p className="confirm-h1">Bạn có chắc chắn muốn xóa?</p>
 
                                 <div className="btn-container">
-                                    <p className="confirm-p">Delete this task!</p>
+                                    <p className="confirm-p">Xóa nhiệm vụ này!</p>
 
                                     <button onClick={cancelDelete} className="cancel-btn">
-                                        Cancel
+                                        Hủy
                                     </button>
                                     <button onClick={confirmDelete} className="confirm-btn">
-                                        Delete
+                                        Xóa
                                     </button>
                                 </div>
                             </div>

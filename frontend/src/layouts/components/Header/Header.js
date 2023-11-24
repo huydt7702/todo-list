@@ -1,9 +1,13 @@
+import { useMutation } from '@tanstack/react-query';
 import HeadlessTippy from '@tippyjs/react/headless';
+import axios from 'axios';
+import { useEffect, useState } from 'react';
 import { toast } from 'react-hot-toast';
 import { connect, useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
-import { useMutation } from '@tanstack/react-query';
 
+import images from '~/assets/images';
+import { NotifyIcon } from '~/components/Icons';
 import Image from '~/components/Image/Image';
 import config from '~/config';
 import { createAxios } from '~/createInstance';
@@ -11,9 +15,11 @@ import { handleSignOut } from '~/firebaseConfig';
 import { logOut } from '~/redux/apiRequest';
 import { logOutSuccess } from '~/redux/authSlice';
 import Search from '../Search';
-import { NotifyIcon } from '~/components/Icons';
 
 function Header({ currentUser }) {
+    const [userById, setUserById] = useState({});
+    const defaultAvatar = images.noImage;
+
     const name = localStorage.getItem('name');
     const avatar = localStorage.getItem('profilePic');
     const email = localStorage.getItem('email');
@@ -35,6 +41,26 @@ function Header({ currentUser }) {
             }
         },
     });
+
+    const handleRedirectToProfilePage = () => {
+        if (currentUser) {
+            navigate(`/profile/${id}`);
+        }
+    };
+
+    useEffect(() => {
+        const getUserById = async () => {
+            try {
+                const res = await axios.get(`/v1/user/${id}`, {
+                    headers: { token: `Bearer ${accessToken}` },
+                });
+                setUserById(res.data.data);
+            } catch (error) {
+                console.log(error);
+            }
+        };
+        getUserById();
+    }, [id, accessToken]);
 
     const handleLogout = async () => {
         if (currentUser) {
@@ -59,15 +85,16 @@ function Header({ currentUser }) {
                 <div className="flex items-center">
                     <Image
                         className="m-[20px] shrink-0 rounded-full w-[88px] h-[88px] object-cover border-[1px] border-solid border-[#777]"
-                        src={avatar || ''}
+                        src={avatar || userById?.avatar || defaultAvatar}
                         alt="Avatar"
+                        onClick={handleRedirectToProfilePage}
                     />
 
                     <div>
-                        <Link to={`/profile/${currentUser?._id}`} className="font-semibold text-[18px]">
-                            {name || currentUser?.username}
-                        </Link>
-                        <p className="text-[14px]">{email || currentUser?.email}</p>
+                        <h3 className="font-semibold text-[18px]" onClick={handleRedirectToProfilePage}>
+                            {name || userById?.username}
+                        </h3>
+                        <p className="text-[14px]">{email || userById?.email}</p>
                     </div>
                 </div>
             </div>
@@ -128,7 +155,7 @@ function Header({ currentUser }) {
                     >
                         <Image
                             className="rounded-full w-[32px] h-[32px] object-cover border-[1px] border-solid border-white"
-                            src={avatar || ''}
+                            src={avatar || userById?.avatar || defaultAvatar}
                             alt="Avatar"
                         />
                     </HeadlessTippy>
