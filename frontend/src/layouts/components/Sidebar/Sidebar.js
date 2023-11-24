@@ -14,6 +14,7 @@ import { useMutation } from '@tanstack/react-query';
 import { BarsIcon, CheckIcon, HomeIcon, SearchIcon, SignOutIcon, StarIcon, TheSunIcon } from '~/components/Icons';
 import config from '~/config';
 import { createAxios } from '~/createInstance';
+import { handleSignOut } from '~/firebaseConfig';
 import { logOut } from '~/redux/apiRequest';
 import { logOutSuccess } from '~/redux/authSlice';
 import styles from './Sidebar.module.scss';
@@ -114,6 +115,8 @@ function Sidebar({ currentUser, showSidebar, handleToggleSidebar }) {
         if (currentUser) {
             // Normal logout
             mutate();
+        } else {
+            handleSignOut(); // Logout google
         }
     };
 

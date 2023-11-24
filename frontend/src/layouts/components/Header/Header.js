@@ -9,6 +9,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import images from '~/assets/images';
 import { NotifyIcon } from '~/components/Icons';
 import Image from '~/components/Image/Image';
+import { handleSignOut } from '~/firebaseConfig';
 import config from '~/config';
 import { createAxios } from '~/createInstance';
 import { logOut } from '~/redux/apiRequest';
@@ -65,6 +66,8 @@ function Header({ currentUser }) {
         if (currentUser) {
             // Normal logout
             mutate();
+        } else {
+            handleSignOut(); // Logout google
         }
     };
 
