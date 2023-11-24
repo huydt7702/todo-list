@@ -10,6 +10,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import images from '~/assets/images';
 import ErrorMessage from '~/components/ErrorMessage';
 import Image from '~/components/Image/Image';
+import { signInWithGoogle } from '~/firebaseConfig';
 import config from '~/config';
 import { registerUser } from '~/redux/apiRequest';
 import { registerValidationSchema } from './validationSchema';
@@ -47,6 +48,10 @@ function Register() {
 
     const onSubmitForm = (data) => {
         mutate(data);
+    };
+
+    const handleSignUpGoogle = () => {
+        signInWithGoogle();
     };
 
     return (
@@ -106,7 +111,10 @@ function Register() {
                     <span className="my-6 text-[#555] text-2xl">-----OR-----</span>
 
                     <div className="flex flex-col items-center w-full gap-4">
-                        <button className="bg-white border-[1px] border-solid border-[#ccc] text-2xl text-[#333] w-full p-4 rounded-md hover:bg-[rgba(0,0,0,0.05)]">
+                        <button
+                            className="bg-white border-[1px] border-solid border-[#ccc] text-2xl text-[#333] w-full p-4 rounded-md hover:bg-[rgba(0,0,0,0.05)]"
+                            onClick={handleSignUpGoogle}
+                        >
                             <FontAwesomeIcon icon={faGoogle} className="text-red-600" />
                             <span className="ml-3">Sign up with Google</span>
                         </button>

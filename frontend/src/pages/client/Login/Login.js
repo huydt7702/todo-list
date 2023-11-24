@@ -8,6 +8,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
 
 import images from '~/assets/images';
+import { signInWithGoogle } from '~/firebaseConfig';
 import ErrorMessage from '~/components/ErrorMessage';
 import Image from '~/components/Image/Image';
 import config from '~/config';
@@ -46,6 +47,10 @@ function Login() {
 
     const onSubmitForm = (data) => {
         mutate(data);
+    };
+
+    const handleSignInGoogle = () => {
+        signInWithGoogle();
     };
 
     return (
@@ -97,7 +102,10 @@ function Login() {
                     <span className="my-2 text-[#555] text-2xl">-----OR-----</span>
 
                     <div className="flex flex-col items-center w-full gap-4">
-                        <button className="bg-white border-[1px] border-solid border-[#ccc] text-2xl text-[#333] w-full p-4 rounded-md hover:bg-[rgba(0,0,0,0.05)]">
+                        <button
+                            className="bg-white border-[1px] border-solid border-[#ccc] text-2xl text-[#333] w-full p-4 rounded-md hover:bg-[rgba(0,0,0,0.05)]"
+                            onClick={handleSignInGoogle}
+                        >
                             <FontAwesomeIcon icon={faGoogle} className="text-red-600" />
                             <span className="ml-3">Continue with Google</span>
                         </button>
