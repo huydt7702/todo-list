@@ -11,7 +11,6 @@ import { NotifyIcon } from '~/components/Icons';
 import Image from '~/components/Image/Image';
 import config from '~/config';
 import { createAxios } from '~/createInstance';
-import { handleSignOut } from '~/firebaseConfig';
 import { logOut } from '~/redux/apiRequest';
 import { logOutSuccess } from '~/redux/authSlice';
 import Search from '../Search';
@@ -66,8 +65,6 @@ function Header({ currentUser }) {
         if (currentUser) {
             // Normal logout
             mutate();
-        } else {
-            handleSignOut(); // Logout google
         }
     };
 
