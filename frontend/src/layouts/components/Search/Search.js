@@ -1,11 +1,17 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { faTasks } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import HeadlessTippy from '@tippyjs/react/headless';
+import { useEffect, useRef, useState } from 'react';
 import { connect } from 'react-redux';
+
+import images from '~/assets/images';
 import { ClearIcon, SearchIcon } from '~/components/Icons';
+import Image from '~/components/Image';
 import TaskList from '~/components/TaskList';
 import { useDebounce } from '~/hooks';
 import * as taskService from '~/services/taskService';
 
-const Search = ({ id }) => {
+function Search({ id }) {
     const inputRef = useRef();
     const [searchValue, setSearchValue] = useState('');
     const [searchResult, setSearchResult] = useState([]);
@@ -13,7 +19,7 @@ const Search = ({ id }) => {
     const [reRenderPage, setReRenderPage] = useState(false);
     const userId = localStorage.getItem('userId');
 
-    const debouncedValue = useDebounce(searchValue, 500);
+    const debouncedValue = useDebounce(searchValue, 700);
 
     useEffect(() => {
         if (!debouncedValue.trim()) {
@@ -22,14 +28,16 @@ const Search = ({ id }) => {
         }
 
         (async () => {
-            try {
-                const result = await taskService.searchTasks(userId ?? id, debouncedValue);
-                setSearchResult(result);
-            } catch (error) {
-                console.error('Error searching tasks:', error);
-            }
+            const { data } = await taskService.getAllTasks();
+            const listTaskOfUserId = data.filter((task) => task.userId === (userId ?? id));
+
+            setSearchResult((prev) => {
+                return listTaskOfUserId.filter((task) => task.name.includes(debouncedValue));
+            });
         })();
-    }, [debouncedValue, userId, id]);
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [debouncedValue]);
 
     const handleChange = (e) => {
         const searchValue = e.target.value;
@@ -42,31 +50,30 @@ const Search = ({ id }) => {
     const handleClear = () => {
         setSearchValue('');
         setSearchResult([]);
+
         inputRef.current.focus();
     };
 
-    const handleSearchResultClick = (task) => {
-        console.log('Selected task:', task);
-        // Thực hiện các hành động mong muốn khi chọn một mục
-    };
-
     const renderResult = () => {
-        if (!debouncedValue.trim()) {
-            return <div className="no-result-message">Vui lòng nhập từ khóa tìm kiếm.</div>;
-        }
-
-        if (searchResult.length === 0) {
-            return <div className="no-result-message">Không có kết quả tìm kiếm.</div>;
-        }
-
         return (
-            <ul className="search-results-list">
-                {searchResult.map((task) => (
-                    <li key={task.id} className="search-result-item" onClick={() => handleSearchResultClick(task)}>
-                        {task.name}
-                    </li>
-                ))}
-            </ul>
+            <div className="bg-white w-[600px] shadow-[0_24px_54px_rgba(0,0,0,0.15)] rounded-[4px] p-[12px] max-sm:hidden">
+                <h3 className="text-[15px] font-medium">
+                    <FontAwesomeIcon className="text-[#2564cf]" icon={faTasks} /> Tìm kiếm: <span>"{searchValue}"</span>
+                </h3>
+                {searchResult.length > 0 ? (
+                    <TaskList
+                        tasks={searchResult}
+                        setTasks={setSearchResult}
+                        reRenderPage={reRenderPage}
+                        setReRenderPage={setReRenderPage}
+                    />
+                ) : (
+                    <div>
+                        <Image src={images.monkey} alt="Tasks not found" className="mx-auto mt-[60px]" />
+                        <p className="text-center mt-[10px] font-medium">Không có tác vụ nào được tìm thấy</p>
+                    </div>
+                )}
+            </div>
         );
     };
 
@@ -75,9 +82,15 @@ const Search = ({ id }) => {
     };
 
     return (
-        <div className="relative w-[800px] mx-auto mt-8">
-            <div className="relative flex items-center rounded-lg border-2 border-indigo-300">
-                <span className="absolute top-0 left-0 bottom-0 flex items-center justify-center px-2 cursor-pointer text-[#2564cf] hover:bg-[rgba(0,0,0,0.05)] transition-colors">
+        <HeadlessTippy
+            visible={showResult}
+            offset={[0, 2]}
+            placement="bottom-start"
+            render={renderResult}
+            onClickOutside={handleHideResult}
+        >
+            <div className="relative flex items-center w-[600px] max-sm:hidden">
+                <span className="absolute top-0 lef-0 bottom-0 flex items-center justify-center px-[8px] text-[#2564cf]">
                     <SearchIcon />
                 </span>
                 <input
@@ -85,28 +98,23 @@ const Search = ({ id }) => {
                     value={searchValue}
                     ref={inputRef}
                     spellCheck={false}
-                    placeholder="Bạn Tìm Gì?..."
-                    className="flex-1 py-2 px-12 rounded-lg text-xl border-cyan-400"
+                    placeholder="Search"
+                    className="flex-1 py-[8px] px-[40px] h-[32px] rounded-md text-xl"
                     onChange={handleChange}
                     onFocus={() => setShowResult(true)}
                 />
-                {searchValue && (
+                {!!searchValue && (
                     <span
-                        className="absolute top-0 bottom-0 right-0 flex items-center justify-center px-2 cursor-pointer text-[#2564cf] hover:bg-[rgba(0,0,0,0.05)] transition-colors"
+                        className="absolute top-0 bottom-0 right-0 flex items-center justify-center px-[8px] cursor-pointer text-[#2564cf] hover:bg-[rgba(0,0,0,0.05)] transition-colors"
                         onClick={handleClear}
                     >
                         <ClearIcon />
                     </span>
                 )}
             </div>
-            {showResult && searchResult.length > 0 && (
-                <div className="absolute z-10 mt-2 w-full bg-white shadow-lg rounded-md overflow-hidden">
-                    {renderResult()}
-                </div>
-            )}
-        </div>
+        </HeadlessTippy>
     );
-};
+}
 
 const mapStateToProps = (state) => {
     return {

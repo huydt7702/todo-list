@@ -106,9 +106,8 @@ function Header({ currentUser }) {
             <Link to={config.routes.home} className="font-semibold text-white hover:underline">
                 To Do
             </Link>
-            <div className=" hidden max-lg:block ">
-                <Search />
-            </div>
+
+            <Search />
 
             <div className="flex items-center gap-[10px] h-full">
                 <HeadlessTippy

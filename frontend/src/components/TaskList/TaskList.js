@@ -112,7 +112,10 @@ function TaskList({ tasks, setTasks, reRenderPage, setReRenderPage }) {
                                     </span>
                                 </li>
                                 <li className="my-[6px] border-b border-solid border-[#e1dfdd] bg-[#e1dfdd]"></li>
-                                <li className="flex items-center px-[12px] h-[36px] text-[#a80000] hover:bg-[#f5f5f5] cursor-pointer" onClick={() => handleDelete(task._id)}>
+                                <li
+                                    className="flex items-center px-[12px] h-[36px] text-[#a80000] hover:bg-[#f5f5f5] cursor-pointer"
+                                    onClick={() => handleDelete(task._id)}
+                                >
                                     <span className="mx-[4px]">
                                         <TrashIcon />
                                     </span>
