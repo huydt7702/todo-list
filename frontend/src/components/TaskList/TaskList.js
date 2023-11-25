@@ -37,8 +37,13 @@ function TaskList({ tasks, setTasks, reRenderPage, setReRenderPage }) {
         const formData = {
             name: e.target.value,
         };
-
-        await taskService.updateTask(formData, task._id);
+    
+        const data = await taskService.updateTask(formData, task._id);
+        if (data.success) {
+            toast.success("Sửa thành công!");
+        } else {
+            toast.error("Lỗi!");
+        }
     };
 
     const handleMoveToImportant = (task) => {
