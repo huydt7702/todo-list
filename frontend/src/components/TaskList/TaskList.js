@@ -1,16 +1,15 @@
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { useState } from 'react';
 import ContentEditable from 'react-contenteditable';
 import { ContextMenu, ContextMenuTrigger } from 'react-contextmenu';
 import { toast } from 'react-hot-toast';
-
+import './TaskList.css';
 import * as taskService from '~/services/taskService';
 import { CheckIcon, CheckSolidIcon, InputRadioIcon, StarIcon, StarSolidIcon, TrashIcon } from '../Icons';
-import './TaskList.css';
 
 function TaskList({ tasks, setTasks, reRenderPage, setReRenderPage }) {
     const [taskIdToDelete, setTaskIdToDelete] = useState(null);
-
+    const [editedTask, setEditedTask] = useState(null);
     const handleDelete = async (id) => {
         setTaskIdToDelete(id);
     };
@@ -34,16 +33,10 @@ function TaskList({ tasks, setTasks, reRenderPage, setReRenderPage }) {
     };
 
     const handleTaskNameChange = async (e, task) => {
-        const formData = {
-            name: e.target.value,
-        };
-    
-        const data = await taskService.updateTask(formData, task._id);
-        if (data.success) {
-            toast.success("Sửa thành công!");
-        } else {
-            toast.error("Lỗi!");
-        }
+        setEditedTask({ ...task, name: e.target.value });
+    };
+    const handleEdit = (task) => {
+        setEditedTask(task); // Set the task in edit mode
     };
 
     const handleMoveToImportant = (task) => {
@@ -61,7 +54,22 @@ function TaskList({ tasks, setTasks, reRenderPage, setReRenderPage }) {
             setReRenderPage(!reRenderPage);
         }
     };
-
+    const handleSaveTask = async () => {
+        if (editedTask) {
+            const formData = {
+                name: editedTask.name,
+            };
+    
+            const data = await taskService.updateTask(formData, editedTask._id);
+            if (data.success) {
+                toast.success("Sửa thành công!");
+                setReRenderPage(!reRenderPage);
+                setEditedTask(null); 
+            } else {
+                toast.error("Lỗi!");
+            }
+        }
+    };
     const handleMoveToFinished = (task) => {
         if (task.isFinished) {
             const formData = {
@@ -80,44 +88,60 @@ function TaskList({ tasks, setTasks, reRenderPage, setReRenderPage }) {
 
     return (
         <div className="mt-[4px]">
-            {tasks.map((task) => (
-                <div key={task._id}>
-                    <ContextMenuTrigger id={task._id}>
-                        <div className="flex items-center shadow-sm px-[16px] mt-[8px] bg-white rounded-[4px] hover:bg-[#f5f5f5] cursor-pointer">
-                            <button className="p-[6px] text-[#2564cf]" onClick={() => handleMoveToFinished(task)}>
-                                {task.isFinished ? <CheckSolidIcon /> : <InputRadioIcon />}
-                            </button>
-                            <div className="px-[14px] py-[8px] w-full">
+        {tasks.map((task) => (
+            <div key={task._id}>
+                <ContextMenuTrigger id={task._id}>
+                    <div className="flex items-center shadow-sm px-[16px] mt-[8px] bg-white rounded-[4px] hover:bg-[#f5f5f5] cursor-pointer">
+                        <button className="p-[6px] text-[#2564cf]" onClick={() => handleMoveToFinished(task)}>
+                            {task.isFinished ? <CheckSolidIcon /> : <InputRadioIcon />}
+                        </button>
+                        <div className="px-[14px] py-[8px] w-full">
+                            {editedTask && editedTask._id === task._id ? (
                                 <ContentEditable
-                                    html={task.name}
+                                    html={editedTask.name}
                                     tagName="p"
                                     className={`text-[14px] outline-none outline-offset-0 focus:outline-[#2564cf] ${
                                         task.isFinished ? 'line-through' : 'no-underline'
                                     }`}
                                     onChange={(e) => handleTaskNameChange(e, task)}
                                 />
-                                <p className="text-[12px] text-[#605e5c]">Tác vụ</p>
-                            </div>
-                            <span
-                                className="text-[#2564cf] px-[4px] py-[2px]"
-                                onClick={() => handleMoveToImportant(task)}
-                            >
-                                {task.isImportant ? <StarSolidIcon /> : <StarIcon />}
-                            </span>
+                            ) : (
+                                <p className={`text-[14px] outline-none outline-offset-0 focus:outline-[#2564cf] ${
+                                    task.isFinished ? 'line-through' : 'no-underline'
+                                }`}>
+                                    {task.name}
+                                </p>
+                            )}
+                            <p className="text-[12px] text-[#605e5c]">Tác vụ</p>
                         </div>
-                    </ContextMenuTrigger>
+                        {editedTask && editedTask._id === task._id ? (
+                            <div>
+                                <button className="p-[6px] text-[#2564cf]" onClick={handleSaveTask}>
+                                    Save
+                                </button>
+                                <button className="p-[6px] text-[#2564cf]" onClick={() => setEditedTask(null)}>
+                                    Cancel
+                                </button>
+                            </div>
+                        ) : (
+                            <button className="p-[6px] text-[#2564cf]" onClick={() => handleEdit(task)}>
+                                Edit
+                            </button>
+                        )}
+                        <span className="text-[#2564cf] px-[4px] py-[2px]" onClick={() => handleMoveToImportant(task)}>
+                            {task.isImportant ? <StarSolidIcon /> : <StarIcon />}
+                        </span>
+                    </div>
+                </ContextMenuTrigger>
 
                     <ContextMenu id={task._id}>
                         <div className="py-[6px] rounded-[4px] bg-white shadow-[rgba(0,0,0,0.133)_0px_3.2px_7.2px_0px]">
                             <ul>
-                                <li
-                                    className="flex items-center px-[12px] h-[36px] hover:bg-[#f5f5f5] cursor-pointer"
-                                    onClick={() => handleMoveToImportant(task)}
-                                >
+                                <li className="flex items-center px-[12px] h-[36px] hover:bg-[#f5f5f5] cursor-pointer" onClick={() => handleMoveToImportant(task)}>
                                     <span className="mx-[4px]">
                                         <StarIcon />
                                     </span>
-                                    <span className="mx-[4px] px-[4px] text-[14px]">
+                                    <span className="mx-[4px] px-[4px] text-[14px]" >
                                         {task.isImportant ? 'Loại bỏ mức độ quan trọng' : 'Đánhh dấu là quan trọng'}
                                     </span>
                                 </li>
@@ -125,10 +149,7 @@ function TaskList({ tasks, setTasks, reRenderPage, setReRenderPage }) {
                                     <span className="mx-[4px]">
                                         <CheckIcon />
                                     </span>
-                                    <span
-                                        className="mx-[4px] px-[4px] text-[14px]"
-                                        onClick={() => handleMoveToFinished(task)}
-                                    >
+                                    <span className="mx-[4px] px-[4px] text-[14px]" onClick={() => handleMoveToFinished(task)}>
                                         {task.isFinished ? 'Đánh dấu là chưa hoàn thành' : 'Đánhh dấu là đã hoàn thành'}
                                     </span>
                                 </li>
@@ -151,16 +172,16 @@ function TaskList({ tasks, setTasks, reRenderPage, setReRenderPage }) {
                         <div>
                             <div className="overlay"></div>
                             <div className="confirmation-dialog">
-                                <p className="confirm-h1">Bạn có chắc chắn muốn xóa?</p>
+                                <p className="confirm-h1">Are you sure you want to delete?</p>
 
                                 <div className="btn-container">
-                                    <p className="confirm-p">Xóa nhiệm vụ này!</p>
+                                    <p className="confirm-p">Delete this task!</p>
 
                                     <button onClick={cancelDelete} className="cancel-btn">
-                                        Hủy
+                                        Cancel
                                     </button>
                                     <button onClick={confirmDelete} className="confirm-btn">
-                                        Xóa
+                                        Delete
                                     </button>
                                 </div>
                             </div>
