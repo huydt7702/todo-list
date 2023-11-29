@@ -89,7 +89,8 @@ function EditTaskQuickView({ data, openModal, handleCloseModal, reRenderPage, se
     const handleClose = () => handleCloseModal();
 
     const updateTaskDesc = useMutation({
-        mutationFn: (taskId) => taskService.updateTask({ name: taskName, description: descValue }, taskId),
+        mutationFn: (taskId) =>
+            taskService.updateTask({ name: taskName || data.name, description: descValue || data.descValue }, taskId),
         onSuccess: ({ success }) => {
             if (success) {
                 toast.success('Cập nhật công việc thành công');
