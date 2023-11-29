@@ -133,9 +133,7 @@ function TaskItem({ task, tasks, setTasks, reRenderPage, setReRenderPage }) {
                             <span className="mx-[4px]">
                                 <CalendarIcon />
                             </span>
-                            <span className="mx-[4px] px-[4px] text-[14px]" onClick={() => handleMoveToFinished(task)}>
-                                Đặt thời hạn cho công việc này
-                            </span>
+                            <span className="mx-[4px] px-[4px] text-[14px]">Đặt thời hạn cho công việc này</span>
                         </li>
                         <li className="my-[6px] border-b border-solid border-[#e1dfdd] bg-[#e1dfdd]"></li>
                         <li
