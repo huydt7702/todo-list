@@ -11,7 +11,7 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 
 import * as taskService from '~/services/taskService';
-import { CalendarIcon, ClearIcon, DescIcon } from '../Icons';
+import { CalendarIcon, ClearIcon, DescIcon, TagsIcon, WatchIcon } from '../Icons';
 
 const styles = {
     boxWrapperModal: {
@@ -142,12 +142,33 @@ function EditTaskQuickView({ data, openModal, handleCloseModal, reRenderPage, se
                                 Mô tả
                             </Box>
                         </Box>
-                        <ReactQuill
-                            placeholder="😀 Mô tả cho công việc này..."
-                            theme="snow"
-                            value={descValue || data.description}
-                            onChange={setDescValue}
-                        />
+                        <Box className="flex gap-[10px]">
+                            <ReactQuill
+                                placeholder="😀 Mô tả cho công việc này..."
+                                theme="snow"
+                                value={descValue || data.description}
+                                onChange={setDescValue}
+                                className="flex-1"
+                            />
+                            <Box className="w-[168px] ">
+                                <Box component={'ul'}>
+                                    <Box
+                                        component={'li'}
+                                        className="flex items-center transition-all gap-[8px] bg-[#091e420f] px-[10px] py-[6px] rounded-[5px] hover:bg-[#091e4224] cursor-pointer"
+                                    >
+                                        <TagsIcon />
+                                        Nhãn
+                                    </Box>
+                                    <Box
+                                        component={'li'}
+                                        className="mt-[8px] flex items-center transition-all gap-[8px] bg-[#091e420f] px-[10px] py-[6px] rounded-[5px] hover:bg-[#091e4224] cursor-pointer"
+                                    >
+                                        <WatchIcon />
+                                        Ngày
+                                    </Box>
+                                </Box>
+                            </Box>
+                        </Box>
                         <Box sx={styles.boxControlBtn}>
                             <Button variant="outlined" sx={styles.boxCancelReview} onClick={handleClose}>
                                 Hủy
