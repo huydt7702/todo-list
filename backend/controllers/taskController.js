@@ -68,6 +68,7 @@ const taskController = {
 
         let task = {
             name: req.body.name,
+            description: req.body.description,
             isImportant: req.body.isImportant,
             isFinished: req.body.isFinished,
             userId: req.body.userId,
