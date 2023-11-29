@@ -1,6 +1,7 @@
 import Skeleton from '@mui/material/Skeleton';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
+import _ from 'lodash';
 import PropTypes from 'prop-types';
 import { useRef, useState } from 'react';
 import { toast } from 'react-hot-toast';
@@ -145,7 +146,7 @@ function CreateTask({ id, important = false, finished = false }) {
                 </>
             ) : (
                 <>
-                    {tasks.length > 0 ? (
+                    {_.size(tasks) > 0 ? (
                         <TaskList
                             tasks={tasks}
                             setTasks={setTasks}
