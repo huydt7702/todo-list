@@ -84,8 +84,8 @@ const styles = {
 };
 
 function EditTaskQuickView({ data, openModal, handleCloseModal, reRenderPage, setReRenderPage }) {
-    const [descValue, setDescValue] = useState(data.description);
-    const [taskName, setTaskName] = useState(data.name);
+    const [descValue, setDescValue] = useState('');
+    const [taskName, setTaskName] = useState('');
     const handleClose = () => handleCloseModal();
 
     const updateTaskDesc = useMutation({
@@ -125,7 +125,7 @@ function EditTaskQuickView({ data, openModal, handleCloseModal, reRenderPage, se
                     >
                         <CalendarIcon width="2.6rem" height="2.6rem" />
                         <ContentEditable
-                            html={taskName}
+                            html={taskName || data.name}
                             tagName="h3"
                             className={`text-[18px] w-full font-medium outline-none outline-offset-0 focus:outline-[#2564cf] ${
                                 data.isFinished ? 'line-through' : 'no-underline'
@@ -144,7 +144,7 @@ function EditTaskQuickView({ data, openModal, handleCloseModal, reRenderPage, se
                         <ReactQuill
                             placeholder="😀 Mô tả cho công việc này..."
                             theme="snow"
-                            value={descValue}
+                            value={descValue || data.description}
                             onChange={setDescValue}
                         />
                         <Box sx={styles.boxControlBtn}>
