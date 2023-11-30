@@ -8,6 +8,7 @@ const authRoute = require("./routes/auth");
 const userRoute = require("./routes/user");
 const taskRoute = require("./routes/task");
 const labelRoute = require("./routes/label");
+const taskLabelRoute = require("./routes/taskLabel");
 dotenv.config();
 
 mongoose
@@ -29,6 +30,7 @@ app.use("/v1/auth", authRoute);
 app.use("/v1/user", userRoute);
 app.use("/v1/task", taskRoute);
 app.use("/v1/label", labelRoute);
+app.use("/v1/task-label", taskLabelRoute);
 
 app.listen(8000, () => {
     console.log("Server is running");

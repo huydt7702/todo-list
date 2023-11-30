@@ -11,6 +11,7 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 
 import * as taskService from '~/services/taskService';
+import AddLabelQuickView from '~/components/AddLabelQuickView';
 import { CalendarIcon, ClearIcon, DescIcon, TagsIcon, WatchIcon } from '../Icons';
 
 const styles = {
@@ -86,6 +87,7 @@ const styles = {
 function EditTaskQuickView({ data, openModal, handleCloseModal, reRenderPage, setReRenderPage }) {
     const [descValue, setDescValue] = useState('');
     const [taskName, setTaskName] = useState('');
+    const [openModalAddLabel, setOpenModalAddLabel] = useState(false);
     const handleClose = () => handleCloseModal();
 
     const updateTaskDesc = useMutation({
@@ -155,10 +157,18 @@ function EditTaskQuickView({ data, openModal, handleCloseModal, reRenderPage, se
                                     <Box
                                         component={'li'}
                                         className="flex items-center transition-all gap-[8px] bg-[#091e420f] px-[10px] py-[6px] rounded-[5px] hover:bg-[#091e4224] cursor-pointer"
+                                        onClick={() => setOpenModalAddLabel(true)}
                                     >
                                         <TagsIcon />
                                         Nhãn
                                     </Box>
+                                    <AddLabelQuickView
+                                        data={data}
+                                        openModal={openModalAddLabel}
+                                        handleCloseModal={() => setOpenModalAddLabel(false)}
+                                        reRenderPage={reRenderPage}
+                                        setReRenderPage={setReRenderPage}
+                                    />
                                     <Box
                                         component={'li'}
                                         className="mt-[8px] flex items-center transition-all gap-[8px] bg-[#091e420f] px-[10px] py-[6px] rounded-[5px] hover:bg-[#091e4224] cursor-pointer"
