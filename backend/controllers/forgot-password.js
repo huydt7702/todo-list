@@ -4,9 +4,9 @@ const sendMail = require("../helpers/sendMail");
 const forgotPassword = async (req, res) => {
     try {
         const { email } = req.body;
-        if (!email) return res.status(400).json({ message: "Email is required" });
+        if (!email) return res.status(400).json({ message: "Cần phải có email" });
         const user = await User.findOne({ email });
-        if (!user) return res.status(400).json({ message: "Email not found" });
+        if (!user) return res.status(400).json({ message: "Không tìm thấy email" });
         const { passwordReset } = user.createChangePasswordToken();
         await user.save();
         const mailOptions = {

@@ -27,7 +27,7 @@ const ForgotPassword = () => {
 
     const onSubmitForm = async ({ email }) => {
         try {
-            toast.success('Please check your email');
+            toast.success('Vui lòng kiểm tra email của bạn');
             await axios.post(
                 'v1/auth/forgot-password',
                 { email },
@@ -48,15 +48,15 @@ const ForgotPassword = () => {
             <div className="flex flex-col items-center justify-center p-8 ">
                 <div className="flex flex-col items-center w-full">
                     <div className="flex flex-col items-center gap-4 mt-10 w-2/5 p-10 pl-12 pr-12 border-1 rounded-lg shadow-[8px_8px_50px_rgba(3,0,71,0.09)] ">
-                        <h1 className="mt-6 mb-2 text-3xl font-semibold">Forgot Password</h1>
-                        <p className="text-[#555] text-2xl">Please enter your email.</p>
+                        <h1 className="mt-6 mb-2 text-3xl font-semibold">Quên mật khẩu</h1>
+                        <p className="text-[#555] text-2xl">Vui lòng nhập email.</p>
                         <div className="w-full">
                             <input
                                 className="w-full text-2xl p-4 border-[1px] border-solid border-[#999] rounded-md"
                                 type="text"
                                 name="email"
                                 {...register('email')}
-                                placeholder="Enter your email"
+                                placeholder="Nhập email của bạn"
                             />
                             <ErrorMessage name={email} />
                         </div>
@@ -64,7 +64,7 @@ const ForgotPassword = () => {
                             onClick={handleSubmit(onSubmitForm)}
                             className="w-full text-2xl p-4 bg-[#2564CF] text-white font-medium border-[1px] border-solid border-[#999] rounded-md hover:opacity-80"
                         >
-                            Submit
+                            Gửi
                         </button>
                     </div>
                 </div>

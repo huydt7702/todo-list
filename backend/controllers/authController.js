@@ -55,12 +55,12 @@ const authController = {
             const user = await User.findOne({ username: req.body.username });
             console.log(user);
             if (!user) {
-                return res.status(404).json("Wrong username!");
+                return res.status(404).json("Tên người dùng sai!");
             }
             const validPassword = await bcrypt.compare(req.body.password, user.password);
             console.log(validPassword);
             if (!validPassword) {
-                return res.status(404).json("Wrong password");
+                return res.status(404).json("Sai mật khẩu");
             }
             if (user && validPassword) {
                 const accessToken = authController.generateAccessToken(user);
@@ -85,9 +85,9 @@ const authController = {
     requestRefreshToken: async (req, res) => {
         //Take refresh token from user
         const refreshToken = req.cookies.refreshToken;
-        if (!refreshToken) return res.status(401).json("You're not authenticated");
+        if (!refreshToken) return res.status(401).json("Bạn chưa được xác thực");
         if (!refreshTokens.includes(refreshToken)) {
-            return res.status(403).json("Refresh token is not valid");
+            return res.status(403).json("Mã thông báo làm mới không hợp lệ");
         }
         jwt.verify(refreshToken, process.env.JWT_REFRESH_KEY, (err, user) => {
             if (err) {
@@ -113,7 +113,7 @@ const authController = {
     userLogout: async (req, res) => {
         res.clearCookie("refreshToken");
         refreshTokens = refreshTokens.filter((token) => token !== req.cookies.refreshToken);
-        res.status(200).json("Logged out !");
+        res.status(200).json("Đã đăng xuất!");
     },
 };
 

@@ -1,7 +1,7 @@
 function Settings() {
     return (
         <div className="wrapper">
-            <h1>Settings Page</h1>
+            <h1>Trang cài đặt</h1>
         </div>
     );
 }

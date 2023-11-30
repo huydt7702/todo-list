@@ -34,9 +34,9 @@ const ButtonCustom = ({ type = 'submit', onClick, children, className, variant }
 function Labels() {
     const schema = Yup.object({
         label: Yup.string()
-            .required('Label is required!')
-            .min(3, 'Label at least 3 characters.')
-            .max(20, 'Label maximum 20 characters'),
+            .required('Nhãn là bắt buộc!')
+            .min(3, 'Gắn nhãn ít nhất 3 ký tự.')
+            .max(20, 'Nhãn tối đa 20 ký tự'),
     });
 
     const {
@@ -61,10 +61,10 @@ function Labels() {
             if (res) {
                 setLabelData(res);
                 reset();
-                toast.success('Create label successfully');
+                toast.success('Tạo nhãn thành công');
             }
         } catch (error) {
-            toast.error('Something wrong, try late');
+            toast.error('Đã xảy ra lỗi, hãy thử muộn');
         } finally {
             setIsLoading(false);
         }
@@ -118,9 +118,9 @@ const ListLabel = ({ dependence, isLoading, setIsLoading }) => {
 
     const schema = Yup.object({
         label: Yup.string()
-            .required('Label is required!')
-            .min(3, 'Label at least 3 characters.')
-            .max(20, 'Label maximum 20 characters'),
+            .required('Bắt buộc nhãn!')
+            .min(3, 'Gắn nhãn ít nhất 3 ký tự.')
+            .max(20, 'Nhãn tối đa 20 ký tự'),
     });
 
     const {
@@ -165,7 +165,7 @@ const ListLabel = ({ dependence, isLoading, setIsLoading }) => {
             });
             reset();
             setOpenModal(false);
-            toast.success('Update label successfully');
+            toast.success('Cập nhật nhãn thành công');
             getLabel();
         } catch (error) {
             console.log(error);
@@ -180,7 +180,7 @@ const ListLabel = ({ dependence, isLoading, setIsLoading }) => {
             const res = await deleteById(`label?id=${id}`);
             if (res) {
                 setOpenModal(false);
-                toast.success('Delete label successfully');
+                toast.success('Xóa nhãn thành công');
                 getLabel();
             }
         } catch (error) {
@@ -206,8 +206,8 @@ const ListLabel = ({ dependence, isLoading, setIsLoading }) => {
                         onRequestClose={() => setOpenModal(false)}
                         contentLabel={
                             ChoseModal
-                                ? 'Edit label'
-                                : `Do you want to delete label ${openModal ? ` "${editLabel?.name}" ` : ''}`
+                                ? 'Chỉnh sửa nhãn'
+                                : `Bạn có muốn xóa nhãn ${openModal ? ` "${editLabel?.name}" ` : ''}`
                         }
                     >
                         {ChoseModal ? (

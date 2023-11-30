@@ -5,10 +5,10 @@ const userController = {
   getAllUsers: async (req, res, next) => {
     const userList = await User.find().select("-password");
 
-    if (!userList) {
+    if (!userList || userList.length === 0) {
       return res.status(500).json({
         success: false,
-        message: "No user existed",
+        message: "Không có người dùng nào tồn tại",
       });
     }
 
@@ -24,7 +24,7 @@ const userController = {
     if (!user) {
       return res.status(500).json({
         success: false,
-        message: "No user existed",
+        message: "Không có người dùng nào tồn tại",
       });
     }
 
@@ -47,7 +47,7 @@ const userController = {
       if (!user) {
         return res.status(500).json({
           success: false,
-          message: "No user existed",
+          message: "Không có người dùng nào tồn tại",
         });
       }
       res.json({
@@ -57,7 +57,7 @@ const userController = {
     } catch (error) {
       return res.status(500).json({
         success: false,
-        message: "The user cannot be updated",
+        message: "Không thể cập nhật người dùng",
         error: error,
       });
     }
@@ -69,12 +69,12 @@ const userController = {
         if (user) {
           return res.status(200).json({
             success: true,
-            message: "The user is deleted!",
+            message: "Người dùng đã bị xóa!",
           });
         } else {
           return res.status(404).json({
             success: false,
-            message: "User not Found",
+            message: "Người dùng không được tìm thấy",
           });
         }
       })
@@ -87,12 +87,12 @@ const userController = {
   },
 
   getUserCount: async (req, res, next) => {
-    const userCount = await User.count({});
+    const userCount = await User.countDocuments({});
 
-    if (!userCount) {
+    if (!userCount || userCount === 0) {
       return res.status(500).json({
         success: false,
-        message: "No user existed",
+        message: "Không có người dùng nào tồn tại",
       });
     }
 
@@ -109,7 +109,7 @@ const userController = {
       if (!user) {
         return res.status(500).json({
           success: false,
-          message: "The user not found",
+          message: "Không tìm thấy người dùng",
         });
       }
 
@@ -120,7 +120,7 @@ const userController = {
     } catch (error) {
       return res.status(500).json({
         success: false,
-        message: "The user cannot be retrieved",
+        message: "Không thể lấy thông tin người dùng",
         error: error,
       });
     }

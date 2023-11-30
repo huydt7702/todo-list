@@ -56,13 +56,13 @@ function Users() {
 
     return (
         <div className="wrapper">
-            <h2>Users</h2>
+            <h2>Người dùng</h2>
             <table className="user-table">
                 <thead>
                     <tr>
-                        <th>Username</th>
+                        <th>Tên tài khoản</th>
                         <th>Email</th>
-                        <th>Action</th>
+                        <th>Hoạt động</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -86,16 +86,16 @@ function Users() {
                                 <div>
                                     <div className="overlay"></div>
                                     <div className="confirmation-dialog">
-                                        <p className="confirm-h1">Are you sure you want to delete?</p>
+                                        <p className="confirm-h1">Bạn có chắc chắn muốn xóa?</p>
 
                                         <div className="btn-container">
-                                            <p className="confirm-p">Delete this task!</p>
+                                            <p className="confirm-p">Xóa nhiệm vụ này!</p>
 
                                             <button onClick={cancelDelete} className="cancel-btn">
-                                                Cancel
+                                            Hủy bỏ
                                             </button>
                                             <button onClick={confirmDelete} className="confirm-btn">
-                                                Delete
+                                            Xóa bỏ
                                             </button>
                                         </div>
                                     </div>

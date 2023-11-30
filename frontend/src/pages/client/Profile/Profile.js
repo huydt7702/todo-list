@@ -77,8 +77,8 @@ const Profile = () => {
     return (
         <div className="w-[500px] mx-auto">
             <div className="flex flex-col items-center justify-center p-12 max-sm:w-full">
-                <h1 className="mt-6 mb-2 text-3xl font-semibold">Profile</h1>
-                <p className="text-[#555] text-2xl">Please enter your details.</p>
+                <h1 className="mt-6 mb-2 text-3xl font-semibold">Hồ sơ</h1>
+                <p className="text-[#555] text-2xl">Vui lòng nhập thông tin chi tiết của bạn.</p>
                 <form
                     className="flex flex-col items-center w-full gap-4 mt-10"
                     onSubmit={handleSubmit(updateProfile.mutate)}
@@ -91,7 +91,7 @@ const Profile = () => {
                             }`}
                             type="text"
                             name="username"
-                            placeholder="Enter your username"
+                            placeholder="Nhập tên người dùng của bạn"
                             {...register('username')}
                         />
                         <p className="text-red-500">{errors.username?.message}</p>
@@ -105,7 +105,7 @@ const Profile = () => {
                             }`}
                             type="text"
                             name="email"
-                            placeholder="Enter your email"
+                            placeholder="Nhập email của bạn"
                             {...register('email')}
                         />
                         <p className="text-red-500">{errors.email?.message}</p>
@@ -119,7 +119,7 @@ const Profile = () => {
                             }`}
                             type="file"
                             name="avatar"
-                            placeholder="Enter your avatar"
+                            placeholder="Nhập hình đại diện của bạn"
                         />
                         <p className="text-red-500">{errors.avatar?.message}</p>
                     </div>
@@ -136,7 +136,7 @@ const Profile = () => {
                         variant="contained"
                         style={{ padding: '10px', width: 120, marginTop: '10px', fontSize: '12px' }}
                     >
-                        Submit
+                        Gửi
                     </LoadingButton>
                 </form>
             </div>

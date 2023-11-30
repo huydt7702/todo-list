@@ -35,9 +35,9 @@ function Header({ currentUser }) {
         mutationFn: () => logOut(dispatch, id, navigate, accessToken, axiosJWT),
         onSuccess: (data) => {
             if (data.status === 200) {
-                toast.success('Logout successfully');
+                toast.success('Đăng xuất thành công');
             } else {
-                toast.error('Logout failed!');
+                toast.error('Đăng xuất không thành công!');
             }
         },
     });

@@ -39,9 +39,9 @@ function Register() {
         mutationFn: (data) => registerUser(data, dispatch, navigate),
         onSuccess: (data) => {
             if (data) {
-                toast.success('Sign up successfully');
+                toast.success('Đăng ký thành công');
             } else {
-                toast.error('Sign up failed!');
+                toast.error('Đăng ký thât bại!');
             }
         },
     });
@@ -66,8 +66,8 @@ function Register() {
             <div class="bg-gray-100 flex rounded-2xl shadow-lg w-1/2">
                 <div className="flex flex-col items-center justify-center p-12 max-sm:w-full">
                     <Image src={images.logo} alt="Logo" className="w-24 rounded-md" />
-                    <h1 className="mt-6 mb-2 text-3xl font-semibold">Create an account</h1>
-                    <p className="text-[#555] text-2xl">Sign Up to Get Started.</p>
+                    <h1 className="mt-6 mb-2 text-3xl font-semibold">Tạo một tài khoản</h1>
+                    <p className="text-[#555] text-2xl">Đăng ký để bắt đầu.</p>
 
                     <form
                         className="flex flex-col items-center w-full gap-4 mt-10"
@@ -78,7 +78,7 @@ function Register() {
                                 className="w-full text-2xl p-4 border-[1px] border-solid border-[#999] rounded-md"
                                 type="text"
                                 name="username"
-                                placeholder="Enter your username"
+                                placeholder="Nhập tên người dùng của bạn"
                                 {...register('username')}
                             />
                             <ErrorMessage name={username} />
@@ -88,7 +88,7 @@ function Register() {
                                 className="w-full text-2xl p-4 border-[1px] border-solid border-[#999] rounded-md"
                                 type="email"
                                 name="email"
-                                placeholder="Enter your email"
+                                placeholder="Nhập email của bạn"
                                 {...register('email')}
                             />
                             <ErrorMessage name={email} />
@@ -98,13 +98,13 @@ function Register() {
                                 className="w-full text-2xl p-4 border-[1px] border-solid border-[#999] rounded-md"
                                 type="password"
                                 name="password"
-                                placeholder="Enter your password"
+                                placeholder="Nhập mật khẩu của bạn"
                                 {...register('password')}
                             />
                             <ErrorMessage name={password} />
                         </div>
                         <button className="bg-[#333] border-[1px] border-solid border-[#333] text-white w-full p-4 rounded-md text-2xl hover:bg-opacity-90">
-                            Create account
+                        Tạo tài khoản
                         </button>
                     </form>
 
@@ -116,14 +116,14 @@ function Register() {
                             onClick={handleSignUpGoogle}
                         >
                             <FontAwesomeIcon icon={faGoogle} className="text-red-600" />
-                            <span className="ml-3">Sign up with Google</span>
+                            <span className="ml-3">Đăng ký với Google</span>
                         </button>
                     </div>
 
                     <p className="mt-8 text-2xl">
-                        Already have an account?{' '}
+                    Bạn đã có một tài khoản chưa?{' '}
                         <Link className="font-medium" to={config.routes.login}>
-                            Login
+                        Đăng nhập
                         </Link>
                     </p>
                 </div>
