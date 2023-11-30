@@ -57,12 +57,15 @@ function Statistical({ id }) {
     return (
         <React.Fragment>
             <div>
+                <h3 className="text-center font-semibold text-[20px] mb-[10px]">Biểu đồ cột</h3>
                 <Bar data={dataChart} />
             </div>
             <div className="mt-[20px]">
+                <h3 className="text-center font-semibold text-[20px] mb-[20px]">Biểu đồ đường</h3>
                 <Line data={dataChart} />
             </div>
             <div className="w-[50%] mt-[20px] mx-auto">
+                <h3 className="text-center font-semibold text-[20px] mb-[20px]">Biểu đồ tròn</h3>
                 <Pie data={dataChart} />
             </div>
         </React.Fragment>

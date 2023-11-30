@@ -87,7 +87,7 @@ const authController = {
         const refreshToken = req.cookies.refreshToken;
         if (!refreshToken) return res.status(401).json("Bạn chưa được xác thực");
         if (!refreshTokens.includes(refreshToken)) {
-            return res.status(403).json("Mã thông báo làm mới không hợp lệ");
+            return res.status(403).json("Refresh token không hợp lệ");
         }
         jwt.verify(refreshToken, process.env.JWT_REFRESH_KEY, (err, user) => {
             if (err) {

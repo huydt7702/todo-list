@@ -8,7 +8,7 @@ import ErrorMessage from '~/components/ErrorMessage';
 
 const ForgotPassword = () => {
     const schema = Yup.object().shape({
-        email: Yup.string().required().email(),
+        email: Yup.string().required('Email là bắt buộc').email('Email không hợp lệ'),
     });
 
     const {

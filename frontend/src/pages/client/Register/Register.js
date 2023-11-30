@@ -104,11 +104,11 @@ function Register() {
                             <ErrorMessage name={password} />
                         </div>
                         <button className="bg-[#333] border-[1px] border-solid border-[#333] text-white w-full p-4 rounded-md text-2xl hover:bg-opacity-90">
-                        Tạo tài khoản
+                            Tạo tài khoản
                         </button>
                     </form>
 
-                    <span className="my-6 text-[#555] text-2xl">-----OR-----</span>
+                    <span className="my-6 text-[#555] text-2xl">-----HOẶC-----</span>
 
                     <div className="flex flex-col items-center w-full gap-4">
                         <button
@@ -121,9 +121,9 @@ function Register() {
                     </div>
 
                     <p className="mt-8 text-2xl">
-                    Bạn đã có một tài khoản chưa?{' '}
+                        Bạn đã có một tài khoản chưa?{' '}
                         <Link className="font-medium" to={config.routes.login}>
-                        Đăng nhập
+                            Đăng nhập
                         </Link>
                     </p>
                 </div>

@@ -40,10 +40,10 @@ function Users() {
             if (data.success) {
                 const updatedUsers = users.filter((user) => user._id !== userIdToDelete);
                 setUsers(updatedUsers);
-                toast.success('Đã xóa thành công người dùng này');
+                toast.success('This user has been removed');
                 setUserIdToDelete(null);
             } else {
-                toast.error('Gặp lỗi khi xóa người dùng này');
+                toast.error('Error while deleting this user');
             }
         } catch (error) {
             console.error('Error:', error);
@@ -56,13 +56,13 @@ function Users() {
 
     return (
         <div className="wrapper">
-            <h2>Người dùng</h2>
+            <h2>Users</h2>
             <table className="user-table">
                 <thead>
                     <tr>
-                        <th>Tên tài khoản</th>
+                        <th>Username</th>
                         <th>Email</th>
-                        <th>Hoạt động</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -78,7 +78,7 @@ function Users() {
                                         }`}
                                         onClick={() => handleDelete(user._id)}
                                     >
-                                        Xóa
+                                        Delete
                                     </button>
                                 </td>
                             </tr>
@@ -86,16 +86,16 @@ function Users() {
                                 <div>
                                     <div className="overlay"></div>
                                     <div className="confirmation-dialog">
-                                        <p className="confirm-h1">Bạn có chắc chắn muốn xóa?</p>
+                                        <p className="confirm-h1">Are you sure you want to delete?</p>
 
                                         <div className="btn-container">
-                                            <p className="confirm-p">Xóa nhiệm vụ này!</p>
+                                            <p className="confirm-p">Delete this user!</p>
 
                                             <button onClick={cancelDelete} className="cancel-btn">
-                                            Hủy bỏ
+                                                Cancel
                                             </button>
                                             <button onClick={confirmDelete} className="confirm-btn">
-                                            Xóa bỏ
+                                                Delete
                                             </button>
                                         </div>
                                     </div>

@@ -16,12 +16,12 @@ const ResetPassword = () => {
 
     const schema = Yup.object().shape({
         password: Yup.string()
-            .required()
-            .min(6, 'Password must be at least 6 characters')
-            .max(16, 'Please enter up to 16 characters'),
+            .required('Mật khẩu là bắt buộc')
+            .min(6, 'Mật khẩu phải có ít nhất 6 ký tự')
+            .max(16, 'Vui lòng nhập tối đa 16 ký tự'),
         confirmPassword: Yup.string()
-            .required()
-            .oneOf([Yup.ref('password')], 'Confirm Password must match password'),
+            .required('Xác nhận mật khẩu là bắt buộc')
+            .oneOf([Yup.ref('password')], 'Xác nhận mật khẩu phải trùng với mật khẩu'),
     });
 
     const {
@@ -37,7 +37,7 @@ const ResetPassword = () => {
 
     const validatePassword = (password, confirmPassword) => {
         if (password !== confirmPassword) {
-            toast.error('Password and confirm password do not match');
+            toast.error('Mật khẩu và mật khẩu xác nhận không khớp');
             return false;
         }
         return true;
@@ -47,7 +47,7 @@ const ResetPassword = () => {
         if (!validatePassword(password, confirmPassword)) return;
         try {
             await axios.post('/v1/auth/reset-password', { token, password });
-            toast.success('Reset password successfully');
+            toast.success('Đặt lại mật khẩu thành công');
             navigate(config.routes.login);
         } catch (error) {
             console.log(error);
@@ -57,8 +57,8 @@ const ResetPassword = () => {
 
     return (
         <div className="flex flex-col items-center justify-center max-w-4xl p-8 mx-auto mt-40 bg-white rounded-xl lg:shadow-lg">
-            <h1 className="mt-6 mb-4 text-4xl font-semibold">Reset your password</h1>
-            <p className="text-[#555] text-2xl">Please enter your new password.</p>
+            <h1 className="mt-6 mb-4 text-4xl font-semibold">Đặt lại mật khẩu của bạn</h1>
+            <p className="text-[#555] text-2xl">Vui lòng nhập mật khẩu mới của bạn.</p>
 
             <form className="w-full p-10 mt-4" onSubmit={handleSubmit(onSubmitForm)}>
                 <div className="flex flex-col w-full gap-4">
@@ -68,7 +68,7 @@ const ResetPassword = () => {
                             type="password"
                             name="password"
                             {...register('password')}
-                            placeholder="Enter your password"
+                            placeholder="Nhập mật khẩu mới của bạn"
                         />
                         <ErrorMessage name={password} />
                     </div>
@@ -78,12 +78,12 @@ const ResetPassword = () => {
                             type="password"
                             name="confirmPassword"
                             {...register('confirmPassword')}
-                            placeholder="Confirm your password"
+                            placeholder="Xác nhận mật khẩu của bạn"
                         />
                         <ErrorMessage name={confirmPassword} />
                     </div>
                     <button className="w-full text-2xl p-4 bg-[#2564CF] text-white font-medium border-[1px] border-solid border-[#999] rounded-md hover:opacity-80">
-                        Submit
+                        Đặt lại
                     </button>
                 </div>
             </form>

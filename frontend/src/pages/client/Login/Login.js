@@ -93,12 +93,12 @@ function Login() {
                             <ErrorMessage name={password} />
                         </div>
                         <button className="bg-[#333] border-[1px] border-solid border-[#333] text-white w-full p-4 rounded-md text-2xl hover:bg-opacity-90">
-                        Đăng nhập
+                            Đăng nhập
                         </button>
                     </form>
-                    <a class="p-3" href="/forgot-password">
+                    <Link class="p-3" to="/forgot-password">
                         Quên mật khẩu
-                    </a>
+                    </Link>
                     <span className="my-2 text-[#555] text-2xl">-----HOẶC-----</span>
 
                     <div className="flex flex-col items-center w-full gap-4">
@@ -114,7 +114,7 @@ function Login() {
                     <p className="mt-8 text-2xl">
                         Bạn chưa có tài khoản?{' '}
                         <Link className="font-medium" to={config.routes.register}>
-                        Đăng ký
+                            Đăng ký
                         </Link>
                     </p>
                 </div>
