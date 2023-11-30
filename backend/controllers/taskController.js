@@ -72,6 +72,7 @@ const taskController = {
             isImportant: req.body.isImportant,
             isFinished: req.body.isFinished,
             userId: req.body.userId,
+            labelId: req.body.labelId,
         };
 
         try {
