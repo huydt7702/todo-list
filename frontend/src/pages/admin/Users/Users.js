@@ -40,10 +40,10 @@ function Users() {
             if (data.success) {
                 const updatedUsers = users.filter((user) => user._id !== userIdToDelete);
                 setUsers(updatedUsers);
-                toast.success('Đã xóa thành công người dùng này');
+                toast.success('This user has been removed');
                 setUserIdToDelete(null);
             } else {
-                toast.error('Gặp lỗi khi xóa người dùng này');
+                toast.error('Error while deleting this user');
             }
         } catch (error) {
             console.error('Error:', error);
@@ -78,7 +78,7 @@ function Users() {
                                         }`}
                                         onClick={() => handleDelete(user._id)}
                                     >
-                                        Xóa
+                                        Delete
                                     </button>
                                 </td>
                             </tr>
@@ -89,7 +89,7 @@ function Users() {
                                         <p className="confirm-h1">Are you sure you want to delete?</p>
 
                                         <div className="btn-container">
-                                            <p className="confirm-p">Delete this task!</p>
+                                            <p className="confirm-p">Delete this user!</p>
 
                                             <button onClick={cancelDelete} className="cancel-btn">
                                                 Cancel

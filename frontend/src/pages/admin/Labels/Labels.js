@@ -33,10 +33,7 @@ const ButtonCustom = ({ type = 'submit', onClick, children, className, variant }
 
 function Labels() {
     const schema = Yup.object({
-        label: Yup.string()
-            .required('Label is required!')
-            .min(3, 'Label at least 3 characters.')
-            .max(20, 'Label maximum 20 characters'),
+        label: Yup.string().required().min(3).max(20),
     });
 
     const {
@@ -64,7 +61,7 @@ function Labels() {
                 toast.success('Create label successfully');
             }
         } catch (error) {
-            toast.error('Something wrong, try late');
+            toast.error('Create label failed!');
         } finally {
             setIsLoading(false);
         }
@@ -117,10 +114,7 @@ const ListLabel = ({ dependence, isLoading, setIsLoading }) => {
     const [ChoseModal, setChoseModal] = useState(true);
 
     const schema = Yup.object({
-        label: Yup.string()
-            .required('Label is required!')
-            .min(3, 'Label at least 3 characters.')
-            .max(20, 'Label maximum 20 characters'),
+        label: Yup.string().required().min(3).max(20),
     });
 
     const {
@@ -207,7 +201,7 @@ const ListLabel = ({ dependence, isLoading, setIsLoading }) => {
                         contentLabel={
                             ChoseModal
                                 ? 'Edit label'
-                                : `Do you want to delete label ${openModal ? ` "${editLabel?.name}" ` : ''}`
+                                : `Do you want to delete ${openModal ? ` "${editLabel?.name}" ` : ''}`
                         }
                     >
                         {ChoseModal ? (

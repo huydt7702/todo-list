@@ -16,7 +16,7 @@ const labelController = {
         } catch (error) {
             return res.status(500).json({
                 success: false,
-                message: "The label cannot be created",
+                message: "Không thể tạo nhãn",
                 error: error,
             });
         }
@@ -28,7 +28,7 @@ const labelController = {
         if (!labels) {
             return res.status(500).json({
                 success: false,
-                message: "No label existed",
+                message: "Không có nhãn nào tồn tại",
             });
         }
 
@@ -44,7 +44,7 @@ const labelController = {
         if (!label) {
             return res.status(500).json({
                 success: false,
-                message: "The label with the given ID was not found",
+                message: "Không tìm thấy nhãn với ID đã cho",
             });
         }
 
@@ -60,7 +60,7 @@ const labelController = {
         if (!labelExist) {
             return res.status(404).json({
                 success: false,
-                message: "The label Not Found",
+                message: "Không tìm thấy nhãn",
             });
         }
 
@@ -78,7 +78,7 @@ const labelController = {
         } catch (error) {
             return res.status(500).json({
                 success: false,
-                message: "The label cannot be updated",
+                message: "Không thể cập nhật nhãn",
                 error: error,
             });
         }
@@ -90,19 +90,19 @@ const labelController = {
                 if (label) {
                     return res.status(200).json({
                         success: true,
-                        message: "The label is deleted",
+                        message: "Nhãn đã bị xóa",
                     });
                 }
 
                 return res.status(404).json({
                     success: false,
-                    message: "The label with the given ID was not found",
+                    message: "Không tìm thấy nhãn với ID đã cho",
                 });
             })
             .catch((error) => {
                 return res.status(500).json({
                     success: false,
-                    message: "The label cannot be deleted",
+                    message: "Không thể xóa nhãn",
                     error: error,
                 });
             });

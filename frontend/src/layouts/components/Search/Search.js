@@ -98,7 +98,7 @@ function Search({ id }) {
                     value={searchValue}
                     ref={inputRef}
                     spellCheck={false}
-                    placeholder="Search"
+                    placeholder="Tìm kiếm..."
                     className="flex-1 py-[8px] px-[40px] h-[32px] rounded-md text-xl"
                     onChange={handleChange}
                     onFocus={() => setShowResult(true)}

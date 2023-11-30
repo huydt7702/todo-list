@@ -18,7 +18,7 @@ const taskController = {
         } catch (error) {
             return res.status(500).json({
                 success: false,
-                message: "The task cannot be created",
+                message: "Không thể tạo nhiệm vụ",
                 error: error,
             });
         }
@@ -30,7 +30,7 @@ const taskController = {
         if (!tasks) {
             return res.status(500).json({
                 success: false,
-                message: "No task existed",
+                message: "Không có nhiệm vụ nào tồn tại",
             });
         }
 
@@ -46,7 +46,7 @@ const taskController = {
         if (!task) {
             return res.status(500).json({
                 success: false,
-                message: "The task with the given ID was not found",
+                message: "Không tìm thấy tác vụ với ID đã cho",
             });
         }
 
@@ -62,7 +62,7 @@ const taskController = {
         if (!taskExist) {
             return res.status(404).json({
                 success: false,
-                message: "The task Not Found",
+                message: "Nhiệm vụ không tìm thấy",
             });
         }
 
@@ -85,7 +85,7 @@ const taskController = {
         } catch (error) {
             return res.status(500).json({
                 success: false,
-                message: "The task cannot be updated",
+                message: "Nhiệm vụ không thể được cập nhật",
                 error: error,
             });
         }
@@ -97,19 +97,19 @@ const taskController = {
                 if (task) {
                     return res.status(200).json({
                         success: true,
-                        message: "The task is deleted",
+                        message: "Nhiệm vụ bị xóa",
                     });
                 }
 
                 return res.status(404).json({
                     success: false,
-                    message: "The task with the given ID was not found",
+                    message: "Không tìm thấy tác vụ với ID đã cho",
                 });
             })
             .catch((error) => {
                 return res.status(500).json({
                     success: false,
-                    message: "The task cannot be deleted",
+                    message: "Nhiệm vụ không thể bị xóa",
                     error: error,
                 });
             });

@@ -38,9 +38,9 @@ function Login() {
         mutationFn: (data) => loginUser(data, dispatch, navigate),
         onSuccess: (data) => {
             if (data) {
-                toast.success('Login successfully');
+                toast.success('Đăng nhập thành công');
             } else {
-                toast.error('Login failed!');
+                toast.error('Đăng nhập thất bại!');
             }
         },
     });
@@ -65,8 +65,8 @@ function Login() {
             <div class="bg-gray-100 flex rounded-2xl shadow-lg w-1/2">
                 <div className="flex flex-col items-center justify-center p-12 max-sm:w-full">
                     <Image src={images.logo} alt="Logo" className="w-24 rounded-md" />
-                    <h1 className="mt-6 mb-2 text-3xl font-semibold">Welcome back</h1>
-                    <p className="text-[#555] text-2xl">Please enter your details.</p>
+                    <h1 className="mt-6 mb-2 text-3xl font-semibold">Chào mừng trở lại</h1>
+                    <p className="text-[#555] text-2xl">Vui lòng nhập thông tin chi tiết của bạn.</p>
 
                     <form
                         className="flex flex-col items-center w-full gap-4 mt-10"
@@ -77,7 +77,7 @@ function Login() {
                                 className="w-full text-2xl p-4 border-[1px] border-solid border-[#999] rounded-md"
                                 type="text"
                                 name="username"
-                                placeholder="Enter your username"
+                                placeholder="Nhập tên người dùng của bạn"
                                 {...register('username')}
                             />
                             <ErrorMessage name={username} />
@@ -87,19 +87,19 @@ function Login() {
                                 className="w-full text-2xl p-4 border-[1px] border-solid border-[#999] rounded-md"
                                 type="password"
                                 name="password"
-                                placeholder="Enter your password"
+                                placeholder="Nhập mật khẩu của bạn"
                                 {...register('password')}
                             />
                             <ErrorMessage name={password} />
                         </div>
                         <button className="bg-[#333] border-[1px] border-solid border-[#333] text-white w-full p-4 rounded-md text-2xl hover:bg-opacity-90">
-                            Login
+                            Đăng nhập
                         </button>
                     </form>
-                    <a class="p-3" href="/forgot-password">
-                        Forgot Password
-                    </a>
-                    <span className="my-2 text-[#555] text-2xl">-----OR-----</span>
+                    <Link class="p-3" to="/forgot-password">
+                        Quên mật khẩu
+                    </Link>
+                    <span className="my-2 text-[#555] text-2xl">-----HOẶC-----</span>
 
                     <div className="flex flex-col items-center w-full gap-4">
                         <button
@@ -107,14 +107,14 @@ function Login() {
                             onClick={handleSignInGoogle}
                         >
                             <FontAwesomeIcon icon={faGoogle} className="text-red-600" />
-                            <span className="ml-3">Continue with Google</span>
+                            <span className="ml-3">Tiếp tục với Google</span>
                         </button>
                     </div>
 
                     <p className="mt-8 text-2xl">
-                        Don't have an account?{' '}
+                        Bạn chưa có tài khoản?{' '}
                         <Link className="font-medium" to={config.routes.register}>
-                            Sign up
+                            Đăng ký
                         </Link>
                     </p>
                 </div>
