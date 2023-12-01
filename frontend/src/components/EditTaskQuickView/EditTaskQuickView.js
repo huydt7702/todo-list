@@ -127,9 +127,9 @@ function EditTaskQuickView({ data, openModal, handleCloseModal, reRenderPage, se
                         }}
                     >
                         <CalendarIcon width="2.6rem" height="2.6rem" />
-                        <ContentEditable
-                            html={taskName || data.name}
-                            tagName="h3"
+                        <input
+                            type="text"
+                            value={taskName || data.name}
                             className={`text-[18px] w-full font-medium outline-none outline-offset-0 focus:outline-[#2564cf] ${
                                 data.isFinished ? 'line-through' : 'no-underline'
                             }`}
