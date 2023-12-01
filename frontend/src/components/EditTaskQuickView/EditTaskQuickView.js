@@ -4,12 +4,14 @@ import Grid from '@mui/material/Grid';
 import Modal from '@mui/material/Modal';
 import { useMutation } from '@tanstack/react-query';
 import PropTypes from 'prop-types';
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import ContentEditable from 'react-contenteditable';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+
 import toast from 'react-hot-toast';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-
 import AddLabelQuickView from '~/components/AddLabelQuickView';
 import * as taskService from '~/services/taskService';
 import ErrorMessage from '../ErrorMessage';
@@ -92,9 +94,57 @@ function EditTaskQuickView({ data, openModal, handleCloseModal, reRenderPage, se
     const [openModalAddLabel, setOpenModalAddLabel] = useState(false);
     const handleClose = () => handleCloseModal();
 
+    const [selectedDates, setSelectedDates] = useState({});
+    // eslint-disable-next-line no-unused-vars
+    const [selectedDate, setSelectedDate] = useState(() => {
+        const savedDate = localStorage.getItem(`selectedDate_${data._id}`);
+        return savedDate ? new Date(savedDate) : null;
+    });
+    const [notificationCount, setNotificationCount] = useState(0);
+    const [isTaskDeleted, setIsTaskDeleted] = useState(false);
+
+    const handleDateChange = (taskId, date) => {
+        setIsTaskDeleted(false);
+        setSelectedDates((prevDates) => ({
+            ...prevDates,
+            [taskId]: date,
+        }));
+    };
+
+    function showNotification(title, options) {
+        if ('Notification' in window) {
+            if (Notification.permission === 'granted') {
+                new Notification(title, options);
+            } else if (Notification.permission !== 'denied') {
+                Notification.requestPermission().then((permission) => {
+                    if (permission === 'granted') {
+                        new Notification(title, options);
+                    }
+                });
+            }
+        }
+    }
+
+    setInterval(() => {
+        if (!isTaskDeleted) {
+            const currentTime = new Date();
+            const taskTime = selectedDates[data._id];
+
+            const oneHour = 60 * 60 * 1000;
+            if (taskTime - currentTime <= oneHour) {
+                if (notificationCount < 3) {
+                    showNotification('Công việc sắp đến hạn', {
+                        body: `Công việc "${taskName || data.name}" sắp đến hạn trong 1 giờ.`,
+                    });
+                    setNotificationCount(notificationCount + 1);
+                }
+            }
+        }
+    }, 60000);
+
     const updateTaskDesc = useMutation({
-        mutationFn: (taskId) =>
-            taskService.updateTask({ name: taskName || data.name, description: descValue || data.descValue }, taskId),
+        mutationFn: ({ taskId, name, description, date }) =>
+            taskService.updateTask({ name, description, date }, taskId),
         onSuccess: ({ success }) => {
             if (success) {
                 toast.success('Cập nhật công việc thành công');
@@ -107,12 +157,60 @@ function EditTaskQuickView({ data, openModal, handleCloseModal, reRenderPage, se
     });
 
     const handleSubmitEdit = (taskId) => {
+        const updatedDate = selectedDate || data.date;
+
         if (isError.message === '') {
-            updateTaskDesc.mutate(taskId);
+            if (updatedDate?.toISOString() !== data.date) {
+                updateTaskDesc.mutate({
+                    taskId,
+                    name: taskName || data.name,
+                    description: descValue || data.descValue,
+                    date: updatedDate,
+                });
+            } else {
+                updateTaskDesc.mutate({
+                    taskId,
+                    name: taskName || data.name,
+                    description: descValue || data.descValue,
+                });
+            }
+
+            setNotificationCount(0);
         } else {
             toast.error(isError.message);
         }
     };
+
+    useEffect(() => {
+        if (selectedDates[data._id]) {
+            localStorage.setItem(`selectedDate_${data._id}`, selectedDates[data._id].toISOString());
+            localStorage.setItem(`taskName_${data._id}`, taskName);
+            localStorage.setItem(`descValue_${data._id}`, descValue);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [selectedDates[data._id], taskName, descValue]);
+
+    useEffect(() => {
+        const savedDate = localStorage.getItem(`selectedDate_${data._id}`);
+        const savedTaskName = localStorage.getItem(`taskName_${data._id}`);
+        const savedDescValue = localStorage.getItem(`descValue_${data._id}`);
+
+        if (savedDate) {
+            setSelectedDates((prevDates) => ({
+                ...prevDates,
+                [data._id]: new Date(savedDate),
+            }));
+        }
+
+        if (savedTaskName) {
+            setTaskName(savedTaskName);
+        }
+
+        if (savedDescValue) {
+            setDescValue(savedDescValue);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     const reactQuillRef = useRef();
 
@@ -191,10 +289,22 @@ function EditTaskQuickView({ data, openModal, handleCloseModal, reRenderPage, se
                                     />
                                     <Box
                                         component={'li'}
-                                        className="mt-[8px] flex items-center transition-all gap-[8px] bg-[#091e420f] px-[10px] py-[6px] rounded-[5px] hover:bg-[#091e4224] cursor-pointer"
+                                        className="mt-[8px] flex items-center flex-col transition-all gap-[8px] bg-[#091e420f] px-[10px] py-[6px] rounded-[5px] hover:bg-[#091e4224] cursor-pointer"
                                     >
-                                        <WatchIcon />
-                                        Ngày
+                                        <Box component={'span'} className="flex items-center gap-[8px]">
+                                            <WatchIcon />
+                                            Ngày
+                                        </Box>
+                                        <DatePicker
+                                            className="w-[148px] text-center"
+                                            selected={selectedDates[data._id]}
+                                            onChange={(date) => handleDateChange(data._id, date)}
+                                            showTimeSelect
+                                            timeFormat="HH:mm"
+                                            timeIntervals={15}
+                                            timeCaption="Time"
+                                            dateFormat="MMM d, h:mm aa"
+                                        />
                                     </Box>
                                 </Box>
                             </Box>
