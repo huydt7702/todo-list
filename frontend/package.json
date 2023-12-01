@@ -39,6 +39,7 @@
         "react-chartjs-2": "^5.2.0",
         "react-contenteditable": "^3.3.7",
         "react-contextmenu": "^2.14.0",
+        "react-datepicker": "^4.24.0",
         "react-dom": "^18.2.0",
         "react-hook-form": "^7.43.3",
         "react-hot-toast": "^2.4.1",
