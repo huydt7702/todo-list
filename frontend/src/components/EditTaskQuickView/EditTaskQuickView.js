@@ -9,7 +9,6 @@ import ContentEditable from 'react-contenteditable';
 import toast from 'react-hot-toast';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-
 import * as taskService from '~/services/taskService';
 import AddLabelQuickView from '~/components/AddLabelQuickView';
 import { CalendarIcon, ClearIcon, DescIcon, TagsIcon, WatchIcon } from '../Icons';
@@ -87,9 +86,10 @@ const styles = {
 function EditTaskQuickView({ data, openModal, handleCloseModal, reRenderPage, setReRenderPage }) {
     const [descValue, setDescValue] = useState('');
     const [taskName, setTaskName] = useState('');
+    const [isError, setIsError] = useState('')
     const [openModalAddLabel, setOpenModalAddLabel] = useState(false);
     const handleClose = () => handleCloseModal();
-
+    const maxChars = 1000;
     const updateTaskDesc = useMutation({
         mutationFn: (taskId) =>
             taskService.updateTask({ name: taskName || data.name, description: descValue || data.descValue }, taskId),
@@ -106,8 +106,16 @@ function EditTaskQuickView({ data, openModal, handleCloseModal, reRenderPage, se
 
     const handleSubmitEdit = (taskId) => {
         updateTaskDesc.mutate(taskId);
-    };
 
+    };
+    const checkCharacter =(value)=> {
+        if (value.length -7 <= maxChars) {
+            setDescValue(value);
+            setIsError("")
+          }else{
+            setIsError("Mô tả không được quá 1000 ký tự.")
+          }
+    }
     return (
         <Modal
             open={openModal}
@@ -149,8 +157,8 @@ function EditTaskQuickView({ data, openModal, handleCloseModal, reRenderPage, se
                                 placeholder="😀 Mô tả cho công việc này..."
                                 theme="snow"
                                 value={descValue || data.description}
-                                onChange={setDescValue}
-                                className="flex-1"
+                                onChange={checkCharacter}
+                                className="flex-1 whitespace-pre-line"
                             />
                             <Box className="w-[168px] ">
                                 <Box component={'ul'}>
@@ -179,6 +187,7 @@ function EditTaskQuickView({ data, openModal, handleCloseModal, reRenderPage, se
                                 </Box>
                             </Box>
                         </Box>
+                        {isError?<p className='text-red-400'>{isError}</p>:""}
                         <Box sx={styles.boxControlBtn}>
                             <Button variant="outlined" sx={styles.boxCancelReview} onClick={handleClose}>
                                 Hủy
