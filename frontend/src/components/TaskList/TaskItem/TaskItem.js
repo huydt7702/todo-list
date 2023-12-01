@@ -83,8 +83,9 @@ function TaskItem({ task, tasks, setTasks, reRenderPage, setReRenderPage }) {
             toast.success('Đã chuyển công việc vào mục hoàn thành');
         }
     };
+
     function removeNonBreakingSpaces(str) {
-        return str.replace(/&nbsp;/g, ' ');
+        return str?.replace(/&nbsp;/g, ' ');
     }
 
     const { data: label = {} } = useQuery({
