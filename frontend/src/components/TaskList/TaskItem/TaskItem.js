@@ -2,6 +2,8 @@ import PropTypes from 'prop-types';
 import { ContextMenu, ContextMenuTrigger } from 'react-contextmenu';
 import { toast } from 'react-hot-toast';
 import { useState } from 'react';
+import axios from 'axios'
+import { useQuery } from '@tanstack/react-query'
 
 import EditTaskQuickView from '~/components/EditTaskQuickView';
 import {
@@ -77,6 +79,13 @@ function TaskItem({ task, tasks, setTasks, reRenderPage, setReRenderPage }) {
         }
     };
 
+    const { data: label = {} } = useQuery({
+        queryKey: ['getLabelById', task.labelId],
+        queryFn: () => axios.get(`/v1/label/${task.labelId}`),
+        enabled: !!task.labelId,
+        select: ({ data: { data } }) => data,
+    });
+
     return (
         <div>
             <ContextMenuTrigger id={task._id}>
@@ -86,13 +95,12 @@ function TaskItem({ task, tasks, setTasks, reRenderPage, setReRenderPage }) {
                     </button>
                     <div className="px-[14px] py-[8px] w-full" onClick={() => setOpenModalEdit(true)}>
                         <p
-                            className={`text-[14px] outline-none outline-offset-0 focus:outline-[#2564cf] ${
-                                task.isFinished ? 'line-through' : 'no-underline'
-                            }`}
+                            className={`text-[14px] outline-none outline-offset-0 focus:outline-[#2564cf] ${task.isFinished ? 'line-through' : 'no-underline'
+                                }`}
                         >
                             {task.name}
                         </p>
-                        <p className="text-[12px] text-[#605e5c]">Tác vụ</p>
+                        <p className="text-[12px] text-[#605e5c]">{label.name || 'Tác vụ'}</p>
                     </div>
                     <span className="text-[#2564cf] px-[4px] py-[2px]" onClick={() => handleMoveToImportant(task)}>
                         {task.isImportant ? <StarSolidIcon /> : <StarIcon />}
