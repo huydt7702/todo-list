@@ -2,8 +2,8 @@ import PropTypes from 'prop-types';
 import { ContextMenu, ContextMenuTrigger } from 'react-contextmenu';
 import { toast } from 'react-hot-toast';
 import { useState } from 'react';
-import axios from 'axios'
-import { useQuery } from '@tanstack/react-query'
+import axios from 'axios';
+import { useQuery } from '@tanstack/react-query';
 
 import EditTaskQuickView from '~/components/EditTaskQuickView';
 import {
@@ -16,6 +16,7 @@ import {
     TrashIcon,
 } from '~/components/Icons';
 import * as taskService from '~/services/taskService';
+import './tasksedit.css';
 
 function TaskItem({ task, tasks, setTasks, reRenderPage, setReRenderPage }) {
     const [openModalEdit, setOpenModalEdit] = useState(false);
@@ -82,6 +83,9 @@ function TaskItem({ task, tasks, setTasks, reRenderPage, setReRenderPage }) {
             toast.success('Đã chuyển công việc vào mục hoàn thành');
         }
     };
+    function removeNonBreakingSpaces(str) {
+        return str.replace(/&nbsp;/g, ' ');
+    }
 
     const { data: label = {} } = useQuery({
         queryKey: ['getLabelById', task.labelId],
@@ -99,10 +103,11 @@ function TaskItem({ task, tasks, setTasks, reRenderPage, setReRenderPage }) {
                     </button>
                     <div className="px-[14px] py-[8px] w-full" onClick={() => setOpenModalEdit(true)}>
                         <p
-                            className={`text-[14px] outline-none outline-offset-0 focus:outline-[#2564cf] ${task.isFinished ? 'line-through' : 'no-underline'
-                                }`}
+                            className={`text-[14px] outline-none fixtask outline-offset-0 focus:outline-[#2564cf] ${
+                                task.isFinished ? 'line-through' : 'no-underline'
+                            }`}
                         >
-                            {task.name}
+                            {removeNonBreakingSpaces(task.name)}
                         </p>
                         <p className="text-[12px] text-[#605e5c]">{label.name || 'Tác vụ'}</p>
                     </div>

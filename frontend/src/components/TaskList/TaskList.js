@@ -13,7 +13,7 @@ function TaskList({ tasks, setTasks, reRenderPage, setReRenderPage }) {
                     tasks={tasks}
                     setTasks={setTasks}
                     reRenderPage={reRenderPage}
-                    setReRenderPage={setReRenderPage}
+                    setReRenderPage={setReRenderPage}                    
                 />
             ))}
         </div>

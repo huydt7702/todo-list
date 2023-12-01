@@ -1,17 +1,18 @@
-import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import Modal from '@mui/material/Modal';
 import { useMutation } from '@tanstack/react-query';
-import { useState } from 'react';
+import PropTypes from 'prop-types';
+import { useRef, useState } from 'react';
 import ContentEditable from 'react-contenteditable';
 import toast from 'react-hot-toast';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 
-import * as taskService from '~/services/taskService';
 import AddLabelQuickView from '~/components/AddLabelQuickView';
+import * as taskService from '~/services/taskService';
+import ErrorMessage from '../ErrorMessage';
 import { CalendarIcon, ClearIcon, DescIcon, TagsIcon, WatchIcon } from '../Icons';
 
 const styles = {
@@ -87,6 +88,7 @@ const styles = {
 function EditTaskQuickView({ data, openModal, handleCloseModal, reRenderPage, setReRenderPage }) {
     const [descValue, setDescValue] = useState('');
     const [taskName, setTaskName] = useState('');
+    const [isError, setIsError] = useState({ message: '' });
     const [openModalAddLabel, setOpenModalAddLabel] = useState(false);
     const handleClose = () => handleCloseModal();
 
@@ -105,7 +107,23 @@ function EditTaskQuickView({ data, openModal, handleCloseModal, reRenderPage, se
     });
 
     const handleSubmitEdit = (taskId) => {
-        updateTaskDesc.mutate(taskId);
+        if (isError.message === '') {
+            updateTaskDesc.mutate(taskId);
+        } else {
+            toast.error(isError.message);
+        }
+    };
+
+    const reactQuillRef = useRef();
+
+    const checkCharacterCount = (event) => {
+        const unprivilegedEditor = reactQuillRef.current.unprivilegedEditor;
+        if (unprivilegedEditor.getLength() > 500 && event.key !== 'Backspace') {
+            setIsError({ message: 'Không mô tả được quá 500 ký tự!' });
+            event.preventDefault();
+        } else {
+            setIsError({ message: '' });
+        }
     };
 
     return (
@@ -146,11 +164,13 @@ function EditTaskQuickView({ data, openModal, handleCloseModal, reRenderPage, se
                         </Box>
                         <Box className="flex gap-[10px]">
                             <ReactQuill
+                                onKeyDown={checkCharacterCount}
+                                ref={reactQuillRef}
                                 placeholder="😀 Mô tả cho công việc này..."
                                 theme="snow"
                                 value={descValue || data.description}
                                 onChange={setDescValue}
-                                className="flex-1"
+                                className="flex-1 max-w-[656px] whitespace-pre-line"
                             />
                             <Box className="w-[168px] ">
                                 <Box component={'ul'}>
@@ -179,6 +199,7 @@ function EditTaskQuickView({ data, openModal, handleCloseModal, reRenderPage, se
                                 </Box>
                             </Box>
                         </Box>
+                        <ErrorMessage name={isError} />
                         <Box sx={styles.boxControlBtn}>
                             <Button variant="outlined" sx={styles.boxCancelReview} onClick={handleClose}>
                                 Hủy
