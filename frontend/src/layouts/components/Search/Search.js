@@ -32,7 +32,7 @@ function Search({ id }) {
             const listTaskOfUserId = data.filter((task) => task.userId === (userId ?? id));
 
             setSearchResult((prev) => {
-                return listTaskOfUserId.filter((task) => task.name.includes(debouncedValue));
+                return listTaskOfUserId.filter((task) => task.name.includes(debouncedValue.trim()));
             });
         })();
 
