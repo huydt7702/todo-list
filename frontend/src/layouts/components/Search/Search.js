@@ -56,11 +56,12 @@ function Search({ id }) {
 
     const maxLength = 50;
     const truncatedSearchValue = searchValue.length > maxLength ? `${searchValue.slice(0, maxLength)}...` : searchValue;
+
     const renderResult = () => {
         return (
             <div className="bg-white w-[600px] shadow-[0_24px_54px_rgba(0,0,0,0.15)] rounded-[4px] p-[12px] max-sm:hidden">
                 <h3 className="text-[15px] font-medium">
-                    <FontAwesomeIcon className="text-[#2564cf]" icon={faTasks} /> Tìm kiếm: <div className='line-clamp-1'>"{truncatedSearchValue}"</div>
+                    <FontAwesomeIcon className="text-[#2564cf]" icon={faTasks} /> Tìm kiếm: "{truncatedSearchValue}"
                 </h3>
                 {searchResult.length > 0 ? (
                     <TaskList
@@ -97,7 +98,7 @@ function Search({ id }) {
                 </span>
                 <input
                     type="text"
-                    value={truncatedSearchValue}
+                    value={searchValue}
                     ref={inputRef}
                     spellCheck={false}
                     placeholder="Tìm kiếm..."
