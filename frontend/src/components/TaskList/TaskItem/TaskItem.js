@@ -54,12 +54,14 @@ function TaskItem({ task, tasks, setTasks, reRenderPage, setReRenderPage }) {
             };
             taskService.updateTask(formData, task._id);
             setReRenderPage(!reRenderPage);
+            toast.success('Đã gỡ công việc khỏi mục quan trọng');
         } else {
             const formData = {
                 isImportant: true,
             };
             taskService.updateTask(formData, task._id);
             setReRenderPage(!reRenderPage);
+            toast.success('Đã chuyển công việc vào mục quan trọng');
         }
     };
 
@@ -70,12 +72,14 @@ function TaskItem({ task, tasks, setTasks, reRenderPage, setReRenderPage }) {
             };
             taskService.updateTask(formData, task._id);
             setReRenderPage(!reRenderPage);
+            toast.success('Đã gỡ công việc khỏi mục hoàn thành');
         } else {
             const formData = {
                 isFinished: true,
             };
             taskService.updateTask(formData, task._id);
             setReRenderPage(!reRenderPage);
+            toast.success('Đã chuyển công việc vào mục hoàn thành');
         }
     };
 
