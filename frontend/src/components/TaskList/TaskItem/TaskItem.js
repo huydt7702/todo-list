@@ -1,9 +1,9 @@
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import axios from 'axios';
 import PropTypes from 'prop-types';
+import { useState } from 'react';
 import { ContextMenu, ContextMenuTrigger } from 'react-contextmenu';
 import { toast } from 'react-hot-toast';
-import { useState } from 'react';
-import axios from 'axios';
-import { useQuery } from '@tanstack/react-query';
 
 import EditTaskQuickView from '~/components/EditTaskQuickView';
 import {
@@ -18,7 +18,7 @@ import {
 import * as taskService from '~/services/taskService';
 import './tasksedit.css';
 
-function TaskItem({ task, tasks, setTasks, reRenderPage, setReRenderPage }) {
+function TaskItem({ task, tasks, setTasks }) {
     const [openModalEdit, setOpenModalEdit] = useState(false);
     const handleCloseModal = () => setOpenModalEdit(false);
 
@@ -48,40 +48,64 @@ function TaskItem({ task, tasks, setTasks, reRenderPage, setReRenderPage }) {
         setTaskIdToDelete(null);
     };
 
-    const handleMoveToImportant = (task) => {
-        if (task.isImportant) {
-            const formData = {
-                isImportant: false,
-            };
-            taskService.updateTask(formData, task._id);
-            setReRenderPage(!reRenderPage);
-            toast.success('Đã gỡ công việc khỏi mục quan trọng');
-        } else {
-            const formData = {
-                isImportant: true,
-            };
-            taskService.updateTask(formData, task._id);
-            setReRenderPage(!reRenderPage);
-            toast.success('Đã chuyển công việc vào mục quan trọng');
-        }
+    const queryClient = useQueryClient();
+
+    const toggleMoveToImportant = useMutation({
+        mutationFn: ({ isImportant, id }) => taskService.updateTask({ isImportant }, id),
+        onSuccess: async ({ data, success }) => {
+            if (success) {
+                await queryClient.invalidateQueries({
+                    queryKey: ['createTask'],
+                });
+
+                toast.success(
+                    data.isImportant ? 'Đã chuyển công việc vào mục quan trọng' : 'Đã gỡ công việc khỏi mục quan trọng',
+                );
+            }
+        },
+    });
+
+    const toggleMoveToFinished = useMutation({
+        mutationFn: ({ isFinished, id }) => taskService.updateTask({ isFinished }, id),
+        onSuccess: async ({ data, success }) => {
+            if (success) {
+                await queryClient.invalidateQueries({
+                    queryKey: ['createTask'],
+                });
+
+                toast.success(
+                    data.isFinished ? 'Đã chuyển công việc vào mục hoàn thành' : 'Đã gỡ công việc khỏi mục hoàn thành',
+                );
+            }
+        },
+    });
+
+    const handleMoveToImportant = (id) => {
+        toggleMoveToImportant.mutateAsync({
+            isImportant: true,
+            id,
+        });
     };
 
-    const handleMoveToFinished = (task) => {
-        if (task.isFinished) {
-            const formData = {
-                isFinished: false,
-            };
-            taskService.updateTask(formData, task._id);
-            setReRenderPage(!reRenderPage);
-            toast.success('Đã gỡ công việc khỏi mục hoàn thành');
-        } else {
-            const formData = {
-                isFinished: true,
-            };
-            taskService.updateTask(formData, task._id);
-            setReRenderPage(!reRenderPage);
-            toast.success('Đã chuyển công việc vào mục hoàn thành');
-        }
+    const handleRemoveToImportant = (id) => {
+        toggleMoveToImportant.mutateAsync({
+            isImportant: false,
+            id,
+        });
+    };
+
+    const handleMoveToFinished = (id) => {
+        toggleMoveToFinished.mutateAsync({
+            isFinished: true,
+            id,
+        });
+    };
+
+    const handleRemoveToFinished = (id) => {
+        toggleMoveToFinished.mutateAsync({
+            isFinished: false,
+            id,
+        });
     };
 
     function removeNonBreakingSpaces(str) {
@@ -99,7 +123,12 @@ function TaskItem({ task, tasks, setTasks, reRenderPage, setReRenderPage }) {
         <div>
             <ContextMenuTrigger id={task._id}>
                 <div className="flex items-center shadow-sm px-[16px] mt-[8px] bg-white rounded-[4px] hover:bg-[#f5f5f5] cursor-pointer">
-                    <button className="p-[6px] text-[#2564cf]" onClick={() => handleMoveToFinished(task)}>
+                    <button
+                        className="p-[6px] text-[#2564cf]"
+                        onClick={() =>
+                            task.isFinished ? handleRemoveToFinished(task._id) : handleMoveToFinished(task._id)
+                        }
+                    >
                         {task.isFinished ? <CheckSolidIcon /> : <InputRadioIcon />}
                     </button>
                     <div className="px-[14px] py-[8px] w-full" onClick={() => setOpenModalEdit(true)}>
@@ -112,17 +141,16 @@ function TaskItem({ task, tasks, setTasks, reRenderPage, setReRenderPage }) {
                         </p>
                         <p className="text-[12px] text-[#605e5c]">{label.name || 'Tác vụ'}</p>
                     </div>
-                    <span className="text-[#2564cf] px-[4px] py-[2px]" onClick={() => handleMoveToImportant(task)}>
+                    <span
+                        className="text-[#2564cf] px-[4px] py-[2px]"
+                        onClick={() =>
+                            task.isImportant ? handleRemoveToImportant(task._id) : handleMoveToImportant(task._id)
+                        }
+                    >
                         {task.isImportant ? <StarSolidIcon /> : <StarIcon />}
                     </span>
                 </div>
-                <EditTaskQuickView
-                    data={task}
-                    openModal={openModalEdit}
-                    handleCloseModal={handleCloseModal}
-                    reRenderPage={reRenderPage}
-                    setReRenderPage={setReRenderPage}
-                />
+                <EditTaskQuickView data={task} openModal={openModalEdit} handleCloseModal={handleCloseModal} />
             </ContextMenuTrigger>
 
             <ContextMenu id={task._id}>
@@ -130,7 +158,9 @@ function TaskItem({ task, tasks, setTasks, reRenderPage, setReRenderPage }) {
                     <ul>
                         <li
                             className="flex items-center px-[12px] h-[36px] hover:bg-[#f5f5f5] cursor-pointer"
-                            onClick={() => handleMoveToImportant(task)}
+                            onClick={() =>
+                                task.isImportant ? handleRemoveToImportant(task._id) : handleMoveToImportant(task._id)
+                            }
                         >
                             <span className="mx-[4px]">
                                 <StarIcon />
@@ -143,7 +173,12 @@ function TaskItem({ task, tasks, setTasks, reRenderPage, setReRenderPage }) {
                             <span className="mx-[4px]">
                                 <CheckIcon />
                             </span>
-                            <span className="mx-[4px] px-[4px] text-[14px]" onClick={() => handleMoveToFinished(task)}>
+                            <span
+                                className="mx-[4px] px-[4px] text-[14px]"
+                                onClick={() =>
+                                    task.isFinished ? handleRemoveToFinished(task._id) : handleMoveToFinished(task._id)
+                                }
+                            >
                                 {task.isFinished ? 'Đánh dấu là chưa hoàn thành' : 'Đánhh dấu là đã hoàn thành'}
                             </span>
                         </li>
@@ -193,8 +228,6 @@ function TaskItem({ task, tasks, setTasks, reRenderPage, setReRenderPage }) {
 
 TaskItem.propTypes = {
     task: PropTypes.object.isRequired,
-    reRenderPage: PropTypes.bool,
-    setReRenderPage: PropTypes.func,
     setTasks: PropTypes.func,
     tasks: PropTypes.array.isRequired,
 };
