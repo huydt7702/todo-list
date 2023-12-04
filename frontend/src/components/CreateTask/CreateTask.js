@@ -17,11 +17,10 @@ function CreateTask({ id, important = false, finished = false }) {
     const taskInputRef = useRef();
     const [taskInput, setTaskInput] = useState('');
     const [tasks, setTasks] = useState([{}]);
-    const [reRenderPage, setReRenderPage] = useState(false);
     const userId = localStorage.getItem('userId');
 
     const { isLoading } = useQuery({
-        queryKey: ['createTask', reRenderPage],
+        queryKey: ['createTask'],
         queryFn: () => axios.get('/v1/task'),
         onSuccess: ({ data: { data, success } }) => {
             if (success) {
@@ -147,12 +146,7 @@ function CreateTask({ id, important = false, finished = false }) {
             ) : (
                 <>
                     {_.size(tasks) > 0 ? (
-                        <TaskList
-                            tasks={tasks}
-                            setTasks={setTasks}
-                            reRenderPage={reRenderPage}
-                            setReRenderPage={setReRenderPage}
-                        />
+                        <TaskList tasks={tasks} setTasks={setTasks} />
                     ) : (
                         <div>
                             <Image src={images.monkey} alt="Tasks not found" className="mx-auto mt-[60px]" />

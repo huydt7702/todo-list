@@ -2,10 +2,9 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import Modal from '@mui/material/Modal';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import PropTypes from 'prop-types';
-import { useRef, useState, useEffect } from 'react';
-import ContentEditable from 'react-contenteditable';
+import { useEffect, useRef, useState } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 
@@ -87,7 +86,7 @@ const styles = {
     },
 };
 
-function EditTaskQuickView({ data, openModal, handleCloseModal, reRenderPage, setReRenderPage }) {
+function EditTaskQuickView({ data, openModal, handleCloseModal }) {
     const [descValue, setDescValue] = useState('');
     const [taskName, setTaskName] = useState('');
     const [isError, setIsError] = useState({ message: '' });
@@ -142,13 +141,18 @@ function EditTaskQuickView({ data, openModal, handleCloseModal, reRenderPage, se
         }
     }, 60000);
 
+    const queryClient = useQueryClient();
+
     const updateTaskDesc = useMutation({
         mutationFn: ({ taskId, name, description, date }) =>
             taskService.updateTask({ name, description, date }, taskId),
-        onSuccess: ({ success }) => {
+        onSuccess: async ({ success }) => {
             if (success) {
+                await queryClient.invalidateQueries({
+                    queryKey: ['createTask'],
+                });
+
                 toast.success('Cập nhật công việc thành công');
-                setReRenderPage(!reRenderPage);
                 handleClose();
             } else {
                 toast.error('Cập nhật công việc thất bại!');
@@ -161,14 +165,14 @@ function EditTaskQuickView({ data, openModal, handleCloseModal, reRenderPage, se
 
         if (isError.message === '') {
             if (updatedDate?.toISOString() !== data.date) {
-                updateTaskDesc.mutate({
+                updateTaskDesc.mutateAsync({
                     taskId,
                     name: taskName || data.name,
                     description: descValue || data.descValue,
                     date: updatedDate,
                 });
             } else {
-                updateTaskDesc.mutate({
+                updateTaskDesc.mutateAsync({
                     taskId,
                     name: taskName || data.name,
                     description: descValue || data.descValue,
@@ -283,8 +287,6 @@ function EditTaskQuickView({ data, openModal, handleCloseModal, reRenderPage, se
                                         data={data}
                                         openModal={openModalAddLabel}
                                         handleCloseModal={() => setOpenModalAddLabel(false)}
-                                        reRenderPage={reRenderPage}
-                                        setReRenderPage={setReRenderPage}
                                     />
                                     <Box
                                         component={'li'}
@@ -335,8 +337,6 @@ EditTaskQuickView.propTypes = {
     data: PropTypes.object.isRequired,
     openModal: PropTypes.bool,
     handleCloseModal: PropTypes.func,
-    reRenderPage: PropTypes.bool,
-    setReRenderPage: PropTypes.func,
 };
 
 export default EditTaskQuickView;

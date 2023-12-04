@@ -2,7 +2,7 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import Modal from '@mui/material/Modal';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
@@ -84,7 +84,7 @@ const styles = {
     },
 };
 
-function AddLabelQuickView({ data, openModal, handleCloseModal, reRenderPage, setReRenderPage }) {
+function AddLabelQuickView({ data, openModal, handleCloseModal }) {
     const handleClose = () => handleCloseModal();
     const [labelId, setLabelId] = useState('');
     const [searchLabelValue, setSearchLabelValue] = useState('');
@@ -118,12 +118,17 @@ function AddLabelQuickView({ data, openModal, handleCloseModal, reRenderPage, se
         onSuccess: ({ data: { data } }) => setListLabel(data),
     });
 
-    const { mutate } = useMutation({
+    const queryClient = useQueryClient();
+
+    const { mutateAsync } = useMutation({
         mutationFn: (labelId) => taskService.updateTask({ labelId: labelId || data.labelId }, data._id),
-        onSuccess: ({ success }) => {
+        onSuccess: async ({ success }) => {
             if (success) {
+                await queryClient.invalidateQueries({
+                    queryKey: ['createTask'],
+                });
+
                 toast.success('Cập nhật nhãn thành công');
-                setReRenderPage(!reRenderPage);
                 handleClose();
             } else {
                 toast.error('Cập nhật nhãn thất bại!');
@@ -136,7 +141,7 @@ function AddLabelQuickView({ data, openModal, handleCloseModal, reRenderPage, se
     };
 
     const handleSave = () => {
-        mutate(labelId);
+        mutateAsync(labelId);
     };
 
     return (
@@ -201,8 +206,6 @@ AddLabelQuickView.propTypes = {
     data: PropTypes.object.isRequired,
     openModal: PropTypes.bool,
     handleCloseModal: PropTypes.func,
-    reRenderPage: PropTypes.bool,
-    setReRenderPage: PropTypes.func,
 };
 
 export default AddLabelQuickView;
