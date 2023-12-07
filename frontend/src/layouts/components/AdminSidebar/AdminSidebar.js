@@ -9,19 +9,13 @@ import { useState } from 'react';
 import { connect } from 'react-redux';
 import { NavLink, useNavigate } from 'react-router-dom';
 
-import { BarsIcon, DashboardIcon, SearchIcon, SignOutIcon, TagsIcon, UserIcon } from '~/components/Icons';
+import { BarsIcon, SearchIcon, SignOutIcon, TagsIcon, UserIcon } from '~/components/Icons';
 import config from '~/config';
 import styles from './AdminSidebar.module.scss';
 
 const cx = classNames.bind(styles);
 
 const sidebarList = [
-    {
-        id: 1,
-        icon: DashboardIcon,
-        to: config.routes.dashboard,
-        title: 'Dashboard',
-    },
     {
         id: 2,
         icon: UserIcon,

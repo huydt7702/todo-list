@@ -4,7 +4,6 @@ import config from '~/config';
 import { DashboardLayout, HeaderOnly } from '~/layouts';
 
 // Pages
-import Dashboard from '~/pages/admin/Dashboard';
 import Labels from '~/pages/admin/Labels';
 import Users from '~/pages/admin/Users';
 import AssignedToMe from '~/pages/client/AssignedToMe';
@@ -48,7 +47,6 @@ const privateRoutes = [
 
 // Admin routes
 const dashboardRoutes = [
-    { path: config.routes.dashboard, component: Dashboard, layout: DashboardLayout },
     { path: config.routes.users, component: Users, layout: DashboardLayout },
     { path: config.routes.labels, component: Labels, layout: DashboardLayout },
 ];

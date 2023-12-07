@@ -12,7 +12,6 @@ const routes = {
     inbox: '/tasks/inbox',
     users: '/users',
     labels: '/labels',
-    dashboard: '/dashboard',
     forgotPassword: '/forgot-password',
     resetPassword: '/reset-password',
     profile: '/profile/:id',
