@@ -93,6 +93,7 @@ function EditTaskQuickView({ data, openModal, handleCloseModal }) {
     const [openModalAddLabel, setOpenModalAddLabel] = useState(false);
     const handleClose = () => handleCloseModal();
 
+    const [isSelectDate, setIsSelectDate] = useState(false);
     const [selectedDates, setSelectedDates] = useState({});
     // eslint-disable-next-line no-unused-vars
     const [selectedDate, setSelectedDate] = useState(() => {
@@ -290,22 +291,28 @@ function EditTaskQuickView({ data, openModal, handleCloseModal }) {
                                     />
                                     <Box
                                         component={'li'}
-                                        className="mt-[8px] flex items-center flex-col transition-all gap-[8px] bg-[#091e420f] px-[10px] py-[6px] rounded-[5px] hover:bg-[#091e4224] cursor-pointer"
+                                        className="mt-[8px] flex items-start flex-col transition-all gap-[8px] bg-[#091e420f] px-[10px] py-[6px] rounded-[5px] hover:bg-[#091e4224] cursor-pointer"
                                     >
-                                        <Box component={'span'} className="flex items-center gap-[8px]">
+                                        <Box
+                                            component={'span'}
+                                            className="flex items-center gap-[8px] w-full"
+                                            onClick={() => setIsSelectDate(!isSelectDate)}
+                                        >
                                             <WatchIcon />
                                             Ngày
                                         </Box>
-                                        <DatePicker
-                                            className="w-[148px] text-center"
-                                            selected={selectedDates[data._id]}
-                                            onChange={(date) => handleDateChange(data._id, date)}
-                                            showTimeSelect
-                                            timeFormat="HH:mm"
-                                            timeIntervals={15}
-                                            timeCaption="Time"
-                                            dateFormat="MMM d, h:mm aa"
-                                        />
+                                        {isSelectDate && (
+                                            <DatePicker
+                                                className="w-[148px] text-center bg-[#333] text-white rounded-[4px]"
+                                                selected={selectedDates[data._id]}
+                                                onChange={(date) => handleDateChange(data._id, date)}
+                                                showTimeSelect
+                                                timeFormat="HH:mm"
+                                                timeIntervals={15}
+                                                timeCaption="Time"
+                                                dateFormat="MMM d, h:mm aa"
+                                            />
+                                        )}
                                     </Box>
                                 </Box>
                             </Box>
