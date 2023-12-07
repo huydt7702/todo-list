@@ -16,7 +16,6 @@ function Search({ id }) {
     const [searchValue, setSearchValue] = useState('');
     const [searchResult, setSearchResult] = useState([]);
     const [showResult, setShowResult] = useState(false);
-    const [reRenderPage, setReRenderPage] = useState(false);
     const userId = localStorage.getItem('userId');
 
     const debouncedValue = useDebounce(searchValue, 700);
@@ -64,12 +63,9 @@ function Search({ id }) {
                     <FontAwesomeIcon className="text-[#2564cf]" icon={faTasks} /> Tìm kiếm: "{truncatedSearchValue}"
                 </h3>
                 {searchResult.length > 0 ? (
-                    <TaskList
-                        tasks={searchResult}
-                        setTasks={setSearchResult}
-                        reRenderPage={reRenderPage}
-                        setReRenderPage={setReRenderPage}
-                    />
+                    <div onClick={handleHideResult}>
+                        <TaskList tasks={searchResult} setTasks={setSearchResult} />
+                    </div>
                 ) : (
                     <div>
                         <Image src={images.monkey} alt="Tasks not found" className="mx-auto mt-[60px]" />
@@ -86,6 +82,7 @@ function Search({ id }) {
 
     return (
         <HeadlessTippy
+            interactive
             visible={showResult}
             offset={[0, 2]}
             placement="bottom-start"
